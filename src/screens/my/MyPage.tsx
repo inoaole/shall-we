@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Menu, Settings as SettingsIcon, ChevronRight, Footprints } from 'lucide-react';
+import { Settings as SettingsIcon, ChevronRight, Footprints } from 'lucide-react';
 import { useApp } from '@/store/AppContext';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { PostFeed } from '@/components/ui/PostFeed';
@@ -28,13 +28,6 @@ export default function MyPage() {
               ShallWe와 함께 성장 중
             </p>
           </div>
-          <button
-            onClick={() => navigate('/settings')}
-            aria-label="메뉴"
-            className="p-1 -mr-1 active:scale-90 transition-transform"
-          >
-            <Menu size={22} className="text-ink" strokeWidth={2} />
-          </button>
         </div>
       </section>
 
