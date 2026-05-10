@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { BookOpen, Home, CheckCircle, User } from 'lucide-react';
 
 const tabs = [
-  { to: '/diary', icon: BookOpen,    label: '다이어리' },
+  { to: '/diary', icon: BookOpen,    label: 'AI 다이어리' },
   { to: '/home',  icon: Home,        label: '홈' },
   { to: '/cert',  icon: CheckCircle, label: '인증' },
   { to: '/my',    icon: User,        label: '마이' },
