@@ -84,7 +84,7 @@ export default function Settings() {
       <Section title="앱">
         <Row Icon={FileText} label="이용약관" onClick={() => notify.error('이용약관은 아직 준비 중이에요.')} />
         <Row Icon={ShieldCheck} label="개인정보 처리방침" onClick={() => notify.error('개인정보 처리방침은 아직 준비 중이에요.')} />
-        <Row Icon={Info} label="버전" trailing={<span className="text-body-12 text-gray">ver 0.2.2</span>} />
+        <Row Icon={Info} label="버전" trailing={<span className="text-body-12 text-gray">ver 0.2.3</span>} />
       </Section>
 
       <Section title="계정">

@@ -9,10 +9,8 @@ export default function MyPage() {
   const { state, dispatch } = useApp();
 
   const nickname = state.user.nickname || '닉네임';
-  const activeChallenge = state.challenges[0];
-  const completedDays = activeChallenge
-    ? state.posts.filter((p) => p.challengeId === activeChallenge.id).length
-    : 0;
+  const completedDaysFor = (id: string) =>
+    state.posts.filter((p) => p.challengeId === id).length;
 
   // Profile stats
   const totalCerts = state.posts.length;
@@ -47,16 +45,21 @@ export default function MyPage() {
         </div>
       </section>
 
-      {/* 오늘의 챌린지 (있을 때만) */}
-      {activeChallenge && (
+      {/* 오늘의 챌린지 (있을 때만, 모든 챌린지) */}
+      {state.challenges.length > 0 && (
         <section>
           <h2 className="text-subtitle-16 text-ink mb-3">오늘의 챌린지</h2>
-          <TodayCard
-            title={activeChallenge.title}
-            durationDays={activeChallenge.durationDays}
-            completedDays={completedDays}
-            onClick={() => navigate('/challenge')}
-          />
+          <div className="space-y-3">
+            {state.challenges.map((c) => (
+              <TodayCard
+                key={c.id}
+                title={c.title}
+                durationDays={c.durationDays}
+                completedDays={completedDaysFor(c.id)}
+                onClick={() => navigate('/challenge')}
+              />
+            ))}
+          </div>
         </section>
       )}
 
