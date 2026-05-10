@@ -29,10 +29,10 @@
 | [`wireframe.md`](./wireframe.md) | 22 화면 ASCII 와이어프레임 + 화면별 개발 요청 기능 |
 | [`plan.md`](./plan.md) | React 구현 플랜 (스택 / 폴더 구조 / 토큰 매핑 / 상태 관리 / 검증) |
 | [`sprints.md`](./sprints.md) | 4 스프린트 인덱스 (S1~S4) |
-| [`sprints/s1-foundation.md`](./sprints/s1-foundation.md) | Foundation: Vite 셋업 + 12 UI primitive (2일) |
-| [`sprints/s2-onboarding.md`](./sprints/s2-onboarding.md) | Onboarding: PHQ-9 14 step Quiz + 결과 분기 (2일) |
-| [`sprints/s3-main-app.md`](./sprints/s3-main-app.md) | Main: 4탭 + 챌린지 만들기/인증 풀 cycle (3일) |
-| [`sprints/s4-polish.md`](./sprints/s4-polish.md) | Polish: 빈 상태 + 토스트 + 반응형 + 배포 (1일) |
+| [`sprints/s1-foundation.md`](./sprints/s1-foundation.md) | Foundation: Vite 셋업 + 12 UI primitive |
+| [`sprints/s2-onboarding.md`](./sprints/s2-onboarding.md) | Onboarding: PHQ-9 14 step Quiz + 결과 분기 |
+| [`sprints/s3-main-app.md`](./sprints/s3-main-app.md) | Main: 4탭 + 챌린지 만들기/인증 풀 cycle |
+| [`sprints/s4-polish.md`](./sprints/s4-polish.md) | Polish: 빈 상태 + 토스트 + 반응형 + 배포 |
 
 ## 기술 스택 (계획)
 
