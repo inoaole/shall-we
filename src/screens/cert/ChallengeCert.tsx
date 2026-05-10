@@ -73,7 +73,7 @@ export default function ChallengeCert() {
       },
     });
     notify.certified();
-    navigate('/diary');
+    navigate('/challenge');
   };
 
   return (

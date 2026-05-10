@@ -16,7 +16,7 @@ export default function PostDetail() {
   if (!post) {
     return (
       <div className="min-h-screen flex flex-col bg-bg-gray">
-        <BackHeader />
+        <BackHeader sticky />
         <div className="flex-1 flex items-center justify-center">
           <p className="text-body-14 text-gray">게시글을 찾을 수 없어요</p>
         </div>
@@ -29,7 +29,7 @@ export default function PostDetail() {
 
   return (
     <div className="min-h-screen bg-bg-gray pb-10">
-      <BackHeader title="챌린지 인증" />
+      <BackHeader title="챌린지 인증" sticky />
 
       <div className="px-5 space-y-4">
         <div className="aspect-square bg-white rounded-xl overflow-hidden flex items-center justify-center">

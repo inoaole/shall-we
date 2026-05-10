@@ -93,6 +93,7 @@ export default function Quiz() {
         <BackHeader
           onBack={handlePrev}
           rightSlot={<StepPagination current={phq9Idx + 1} total={PHQ9_TOTAL} />}
+          sticky
         />
         <div className="px-5 mb-10">
           <ProgressBar value={(phq9Idx + 1) / PHQ9_TOTAL} />
@@ -126,7 +127,7 @@ export default function Quiz() {
   const allAnswered = preferenceAxes.every((a) => prefMap[a.id] !== undefined);
   return (
     <div className="min-h-screen flex flex-col bg-bg-gray">
-      <BackHeader onBack={handlePrev} title="챌린지 선호 조사" />
+      <BackHeader onBack={handlePrev} title="챌린지 선호 조사" sticky />
       <div className="px-5 pt-2 pb-8 flex-1 flex flex-col">
         <p className="text-body-14 text-gray mb-6">
           5가지 축에서 끌리는 쪽을 골라줘.

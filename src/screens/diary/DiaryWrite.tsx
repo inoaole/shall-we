@@ -14,9 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import { useApp, type DiaryEntry, type Mood } from '@/store/AppContext';
 import { Button } from '@/components/ui/Button';
 import { BackHeader } from '@/components/layout/BackHeader';
+import { MoodSlider, moodFromScore } from '@/components/ui/MoodSlider';
 import { diaryPrompts } from '@/data/diary-prompts';
 import { pickFeedback, recommendByMood } from '@/data/ai-feedback';
-import { inferMood } from '@/utils/diary';
 
 type Phase = 'write' | 'analyzing' | 'result';
 
@@ -31,6 +31,7 @@ export default function DiaryWrite() {
   const navigate = useNavigate();
   const { dispatch } = useApp();
   const [phase, setPhase] = useState<Phase>('write');
+  const [moodScore, setMoodScore] = useState(50);
   const [answers, setAnswers] = useState({ q1: '', q2: '', q3: '' });
   const [analyzingStage, setAnalyzingStage] = useState<0 | 1>(0);
   const [entry, setEntry] = useState<DiaryEntry | null>(null);
@@ -57,8 +58,8 @@ export default function DiaryWrite() {
     stage1Timer.current = setTimeout(() => {
       setAnalyzingStage(1);
       stage2Timer.current = setTimeout(() => {
-        const mood = inferMood(answers);
         const dateIso = new Date().toISOString();
+        const mood: Mood = moodFromScore(moodScore);
         const newEntry: DiaryEntry = {
           id: crypto.randomUUID(),
           date: dateIso,
@@ -95,9 +96,17 @@ export default function DiaryWrite() {
         <BackHeader title="AI 다이어리" onBack={() => navigate(-1)} sticky />
         <div className="px-5 pt-6 space-y-6">
           <div>
-            <h1 className="text-title-20 text-ink mb-1">오늘의 기록</h1>
-            <p className="text-body-14 text-gray">오늘 하루는 어떤 감정이었나요?</p>
+            <h1 className="text-title-20 text-ink">오늘의 기록</h1>
           </div>
+
+          {/* Mood slider — Figma 40000663:1050 */}
+          <div className="bg-white rounded-2xl border border-gray/15 shadow-sm p-5">
+            <p className="text-body-14 text-ink font-medium mb-4">
+              오늘 하루는 어떤 감정이었나요?
+            </p>
+            <MoodSlider value={moodScore} onChange={setMoodScore} />
+          </div>
+
           {diaryPrompts.map((p) => (
             <div key={p.id} className="space-y-2">
               <label htmlFor={p.id} className="text-body-14 text-ink font-medium block">

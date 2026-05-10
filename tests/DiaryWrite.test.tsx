@@ -55,8 +55,12 @@ describe('DiaryWrite', () => {
     expect(screen.getByRole('button', { name: 'AI 감정 분석 보기' })).not.toBeDisabled();
   });
 
-  it('CTA → analyzing 1단계 → 2단계 → result', () => {
+  it('CTA → analyzing 1단계 → 2단계 → result (slider 부정적)', () => {
     renderWrite();
+    // 슬라이더를 부정적(0)으로 설정
+    const slider = screen.getByLabelText('오늘의 기분') as HTMLInputElement;
+    fireEvent.change(slider, { target: { value: '0' } });
+
     const boxes = screen.getAllByRole('textbox');
     fireEvent.change(boxes[0], { target: { value: '오늘 힘들었어요' } });
     fireEvent.change(boxes[1], { target: { value: '무기력해요' } });
@@ -74,7 +78,7 @@ describe('DiaryWrite', () => {
       vi.advanceTimersByTime(1600);
     });
     expect(screen.getByText('AI의 따뜻한 응원')).toBeInTheDocument();
-    // negative mood 검증 (힘들/무기력 → negative)
+    // 슬라이더로 선택한 negative mood가 결과에 반영
     expect(screen.getByText('힘듦')).toBeInTheDocument();
   });
 

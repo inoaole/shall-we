@@ -1,24 +1,42 @@
 import { useNavigate } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
+import {
+  ChevronRight,
+  Bell,
+  FileText,
+  ShieldCheck,
+  Info,
+  LogOut,
+  UserX,
+  type LucideIcon,
+} from 'lucide-react';
 import { useApp } from '@/store/AppContext';
 import { clearStorage } from '@/utils/storage';
 import { notify } from '@/utils/notify';
 import { BackHeader } from '@/components/layout/BackHeader';
 
 interface RowProps {
+  Icon: LucideIcon;
   label: string;
   onClick?: () => void;
   trailing?: React.ReactNode;
+  danger?: boolean;
 }
 
-function Row({ label, onClick, trailing }: RowProps) {
+function Row({ Icon, label, onClick, trailing, danger }: RowProps) {
   return (
     <button
       onClick={onClick}
       disabled={!onClick}
       className="w-full px-5 py-4 flex items-center gap-3 active:bg-bg-gray transition-colors disabled:active:bg-transparent text-left"
     >
-      <span className="flex-1 text-body-14 text-ink">{label}</span>
+      <Icon
+        size={18}
+        strokeWidth={1.75}
+        className={danger ? 'text-danger' : 'text-gray'}
+      />
+      <span className={`flex-1 text-body-14 ${danger ? 'text-danger' : 'text-ink'}`}>
+        {label}
+      </span>
       {trailing ?? (onClick && <ChevronRight size={18} className="text-gray" />)}
     </button>
   );
@@ -60,18 +78,18 @@ export default function Settings() {
       <BackHeader title="설정" sticky />
 
       <Section title="알림">
-        <Row label="알림 설정" onClick={() => notify.error('알림 설정은 아직 준비 중이에요.')} />
+        <Row Icon={Bell} label="알림 설정" onClick={() => notify.error('알림 설정은 아직 준비 중이에요.')} />
       </Section>
 
       <Section title="앱">
-        <Row label="이용약관" onClick={() => notify.error('이용약관은 아직 준비 중이에요.')} />
-        <Row label="개인정보 처리방침" onClick={() => notify.error('개인정보 처리방침은 아직 준비 중이에요.')} />
-        <Row label="버전" trailing={<span className="text-body-12 text-gray">ver 0.2.1</span>} />
+        <Row Icon={FileText} label="이용약관" onClick={() => notify.error('이용약관은 아직 준비 중이에요.')} />
+        <Row Icon={ShieldCheck} label="개인정보 처리방침" onClick={() => notify.error('개인정보 처리방침은 아직 준비 중이에요.')} />
+        <Row Icon={Info} label="버전" trailing={<span className="text-body-12 text-gray">ver 0.2.2</span>} />
       </Section>
 
       <Section title="계정">
-        <Row label="로그아웃" onClick={handleLogout} />
-        <Row label="회원탈퇴" onClick={handleWithdraw} />
+        <Row Icon={LogOut} label="로그아웃" onClick={handleLogout} />
+        <Row Icon={UserX} label="회원탈퇴" onClick={handleWithdraw} danger />
       </Section>
     </div>
   );

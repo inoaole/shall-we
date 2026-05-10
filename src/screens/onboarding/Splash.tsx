@@ -22,7 +22,7 @@ export default function Splash() {
   }, [navigate, state]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-bg-gray to-bg-green-tint/60 px-5 relative">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-5 relative">
       <div className="flex flex-col items-center gap-5">
         <img
           src="/logo/symbol.png"
@@ -31,7 +31,7 @@ export default function Splash() {
         />
         <img src="/logo/wordmark.png" alt="Shall We" className="h-7" />
       </div>
-      <p className="absolute bottom-10 text-body-12 text-gray">ver 0.2.1</p>
+      <p className="absolute bottom-10 text-body-12 text-gray">ver 0.2.2</p>
     </div>
   );
 }

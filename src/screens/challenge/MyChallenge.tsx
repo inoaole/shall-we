@@ -107,7 +107,7 @@ export default function MyChallenge() {
           </>
         ) : (
           <EmptyState
-            message="아직 진행 중인 챌린지가 없어요"
+            message="아직 시작한 챌린지가 없어요"
             action={{ label: '챌린지 시작하기', onClick: () => navigate('/create') }}
           />
         )}
