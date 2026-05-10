@@ -47,3 +47,4 @@ Desktop.ini
 
 # Local working files (가능한 임시 산출물)
 *.local
+.gstack/
