@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { useApp } from '@/store/AppContext';
 import { clearStorage } from '@/utils/storage';
+import { notify } from '@/utils/notify';
 
 interface RowProps {
   label: string;
@@ -65,13 +66,13 @@ export default function Settings() {
       </header>
 
       <Section title="알림">
-        <Row label="알림 설정" onClick={() => alert('알림 설정 (구현 예정)')} />
+        <Row label="알림 설정" onClick={() => notify.error('알림 설정은 아직 준비 중이에요.')} />
       </Section>
 
       <Section title="앱">
-        <Row label="이용약관" onClick={() => alert('이용약관 (구현 예정)')} />
-        <Row label="개인정보 처리방침" onClick={() => alert('개인정보 처리방침 (구현 예정)')} />
-        <Row label="버전" trailing={<span className="text-body-12 text-gray">ver 0.0.2</span>} />
+        <Row label="이용약관" onClick={() => notify.error('이용약관은 아직 준비 중이에요.')} />
+        <Row label="개인정보 처리방침" onClick={() => notify.error('개인정보 처리방침은 아직 준비 중이에요.')} />
+        <Row label="버전" trailing={<span className="text-body-12 text-gray">ver 0.0.3</span>} />
       </Section>
 
       <Section title="계정">

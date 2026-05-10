@@ -1,20 +1,21 @@
 /**
- * S2 stub for the notification system.
- * S4 will swap this for sonner; for now, console.warn keeps things visible
- * during dev without polluting the prototype with extra deps.
+ * Toast notifications via sonner (S4: replaces v0.0.2 console stub).
+ * Imported by all dispatching code paths so signature stays stable.
  */
+
+import { toast } from 'sonner';
 
 export const notify = {
   storageQuota: () =>
-    console.warn('[storage] sessionStorage quota exceeded — some data may not persist'),
+    toast.warning('저장 공간이 부족해요. 일부 데이터가 유지되지 않을 수 있어요.'),
   pickerCanceled: () =>
-    console.warn('[picker] 사진을 선택해주세요'),
+    toast.info('사진을 선택해주세요.'),
   challengeAdded: (title: string) =>
-    console.info(`[challenge] '${title}' 추가됨`),
+    toast.success(`'${title}' 챌린지가 추가되었어요!`),
   certified: () =>
-    console.info('[cert] 인증 완료'),
+    toast.success('인증 완료! 다이어리에서 확인해보세요.'),
   demoMode: () =>
-    console.info('[auth] 데모 모드 — 자동 가입'),
+    toast.info('데모 모드입니다. 자동으로 가입되었어요.'),
   error: (msg: string) =>
-    console.error(`[error] ${msg}`),
+    toast.error(msg),
 };

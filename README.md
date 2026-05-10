@@ -3,7 +3,7 @@
 > '쉬었음 청년'을 위한 AI 감정기록 챌린지 서비스
 > 연세대 UXIM 3팀(레디액션) — React 프로토타입
 
-[![status](https://img.shields.io/badge/status-planning_complete-blue)]() [![sprints](https://img.shields.io/badge/sprints-S0_planning-lightgrey)]()
+[![version](https://img.shields.io/badge/version-0.0.3-24D455)]() [![sprints](https://img.shields.io/badge/sprints-S1·S2·S3·S4-24D455)]() [![tests](https://img.shields.io/badge/tests-19_pass-24D455)]()
 
 <p>
   <img src="./assets/logo/symbol.png" width="80" alt="ShallWe symbol">
@@ -82,11 +82,12 @@ npm run dev
 
 ## 진행 현황
 
-- [x] **S0 — Planning** (현재) : design.md / wireframe.md / plan.md / sprints/ 작성 완료
-- [ ] **S1 — Foundation** : Vite 셋업 + 12 UI primitive
-- [ ] **S2 — Onboarding Flow** : Splash → Result 풀 클릭 완주
-- [ ] **S3 — Main App** : 4탭 + 챌린지 만들기/인증 풀 cycle
-- [ ] **S4 — Polish & Demo Ready** : UT 가능 수준
+- [x] **S0 — Planning** : design.md / wireframe.md / plan.md / sprints/ 작성
+- [x] **S1 — Foundation** (v0.0.1) : Vite 셋업 + 12 UI primitive + 라우팅 골격
+- [x] **S2 — Onboarding Flow** (v0.0.1) : Splash → Quiz 14 step → Result 풀 클릭
+- [x] **S3 — Main App** (v0.0.2) : 4탭 + 챌린지 만들기/인증 풀 cycle
+- [x] **S4 — Polish & Demo Ready** (v0.0.3) : sonner 토스트 / fade-in 화면 전환 / 반응형
+- [ ] **(옵션) Vercel 배포 + UT 일정**
 
 ## 팀
 
