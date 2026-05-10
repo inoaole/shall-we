@@ -55,52 +55,51 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen pb-10 bg-bg-gray">
+    <div className="min-h-screen pb-10 bg-white">
       <BackHeader sticky />
 
-      <h1 className="text-title-24 text-ink mt-4 mb-8 px-5">
-        무기력 검사 전<br />회원가입을 진행해주세요!
-      </h1>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 px-5">
-        <Input
-          label="닉네임"
-          placeholder="Shall We"
-          helper="2-10자"
-          error={errors.nickname?.message}
-          {...register('nickname')}
-        />
-        <Input
-          label="이메일"
-          type="email"
-          placeholder="example@email.com"
-          error={errors.email?.message}
-          {...register('email')}
-        />
-        <Input
-          label="비밀번호"
-          type="password"
-          placeholder="••••••••"
-          helper="8자 이상, 영문 + 숫자 + 특수문자"
-          error={errors.password?.message}
-          {...register('password')}
-        />
-
-        <div className="pt-2">
-          <Button type="submit" disabled={!isValid}>가입하기</Button>
-        </div>
-      </form>
-
-      <div className="flex items-center gap-3 my-6 px-5">
-        <div className="flex-1 h-px bg-gray/25" />
-        <span className="text-body-12 text-gray">또는</span>
-        <div className="flex-1 h-px bg-gray/25" />
-      </div>
-
       <div className="px-5">
+        <h1 className="text-title-24 text-ink mt-2 mb-8">
+          회원가입
+        </h1>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <Input
+            label="닉네임"
+            placeholder="닉네임을 입력해주세요"
+            error={errors.nickname?.message}
+            {...register('nickname')}
+          />
+          <Input
+            label="이메일"
+            type="email"
+            placeholder="example@email.com"
+            error={errors.email?.message}
+            {...register('email')}
+          />
+          <Input
+            label="비밀번호"
+            type="password"
+            placeholder="비밀번호를 입력해주세요"
+            helper="8자 이상, 영문 + 숫자 + 특수문자"
+            error={errors.password?.message}
+            {...register('password')}
+          />
+
+          <div className="pt-4">
+            <Button type="submit" disabled={!isValid}>가입하기</Button>
+          </div>
+        </form>
+
+        <div className="flex items-center gap-3 my-6">
+          <div className="flex-1 h-px bg-gray/25" />
+          <span className="text-body-12 text-gray">또는</span>
+          <div className="flex-1 h-px bg-gray/25" />
+        </div>
+
         <Button
           variant="social"
-          leftIcon={<span className="font-bold">G</span>}
+          leftIcon={<span className="font-bold text-lg">G</span>}
           onClick={handleGoogle}
         >
           구글로 계속

@@ -19,8 +19,13 @@ export default function Analyzing() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-bg-gray gap-8 px-5">
-      <img src="/logo/symbol.png" alt="" className="w-20 h-20" />
-      <p className="text-title-20 text-ink text-center">
+      <img
+        src="/logo/symbol.png"
+        alt=""
+        className="w-20 h-20 animate-spin"
+        style={{ animationDuration: '2s' }}
+      />
+      <p className="text-title-20 text-ink text-center leading-relaxed">
         {nickname}님의 마음을<br />읽고 있어요!
       </p>
       <Loading />

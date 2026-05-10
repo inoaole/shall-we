@@ -16,17 +16,19 @@ import { BackHeader } from '@/components/layout/BackHeader';
 import { uuid } from '@/utils/id';
 import { notify } from '@/utils/notify';
 import recommendations from '@/mocks/recommendations.json';
-import { RecommendDialog } from './RecommendDialog';
+import { RecommendDialog, type DialogCategory } from './RecommendDialog';
 import { recIcon } from '@/utils/rec-icon';
 
-type Recommendation = (typeof recommendations)[number];
+const CATEGORY_CYCLE: DialogCategory[] = ['yellow', 'blue', 'purple', 'peach'];
+const categoryFor = (idx: number): DialogCategory => CATEGORY_CYCLE[idx % CATEGORY_CYCLE.length];
 
 export default function Recommend() {
   const navigate = useNavigate();
   const { dispatch } = useApp();
   const [emblaRef, embla] = useEmblaCarousel({ loop: false, align: 'center' });
   const [selectedIdx, setSelectedIdx] = useState(0);
-  const [pendingRec, setPendingRec] = useState<Recommendation | null>(null);
+  const [pendingIdx, setPendingIdx] = useState<number | null>(null);
+  const pendingRec = pendingIdx !== null ? recommendations[pendingIdx] : null;
 
   // Track selected slide for indicator
   if (embla) {
@@ -47,18 +49,18 @@ export default function Recommend() {
       },
     });
     notify.challengeAdded(pendingRec.action);
-    setPendingRec(null);
+    setPendingIdx(null);
     navigate('/home');
   };
 
   return (
-    <div className="min-h-screen pb-10 bg-bg-gray">
+    <div className="min-h-screen pb-10 bg-bg-app">
       <BackHeader title="어떤 챌린지를 해볼까요?" sticky />
 
       <div className="mt-4">
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex">
-            {recommendations.map((rec) => (
+            {recommendations.map((rec, i) => (
               <div key={rec.id} className="flex-[0_0_85%] mr-3 first:ml-5 last:mr-5">
                 <RecommendCard
                   action={rec.action}
@@ -67,7 +69,7 @@ export default function Recommend() {
                   effect={rec.effect}
                   durationDays={rec.durationDays}
                   Icon={recIcon(rec.icon)}
-                  onClick={() => setPendingRec(rec)}
+                  onClick={() => setPendingIdx(i)}
                 />
               </div>
             ))}
@@ -97,14 +99,15 @@ export default function Recommend() {
 
       <Modal
         open={pendingRec !== null}
-        onClose={() => setPendingRec(null)}
+        onClose={() => setPendingIdx(null)}
         ariaLabel="챌린지 추가 확인"
       >
-        {pendingRec && (
+        {pendingRec && pendingIdx !== null && (
           <RecommendDialog
             rec={pendingRec}
+            category={categoryFor(pendingIdx)}
             onConfirm={handleConfirm}
-            onCancel={() => setPendingRec(null)}
+            onCancel={() => setPendingIdx(null)}
           />
         )}
       </Modal>

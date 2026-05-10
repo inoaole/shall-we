@@ -22,7 +22,6 @@ import { TabLayout } from '@/components/layout/TabLayout';
 const Splash         = lazy(() => import('@/screens/onboarding/Splash'));
 const Intro1         = lazy(() => import('@/screens/onboarding/Intro1'));
 const Intro2         = lazy(() => import('@/screens/onboarding/Intro2'));
-const Intro3         = lazy(() => import('@/screens/onboarding/Intro3'));
 const Signup         = lazy(() => import('@/screens/onboarding/Signup'));
 const Quiz           = lazy(() => import('@/screens/onboarding/Quiz'));
 const Analyzing      = lazy(() => import('@/screens/onboarding/Analyzing'));
@@ -35,6 +34,9 @@ const Recommend      = lazy(() => import('@/screens/create/Recommend'));
 const Steps          = lazy(() => import('@/screens/create/Steps'));
 const DiaryTab       = lazy(() => import('@/screens/diary/DiaryTab'));
 const DiaryWrite     = lazy(() => import('@/screens/diary/DiaryWrite'));
+const DiaryAnalyzing = lazy(() => import('@/screens/diary/DiaryAnalyzing'));
+const DiaryResult    = lazy(() => import('@/screens/diary/DiaryResult'));
+const DiaryRecommend = lazy(() => import('@/screens/diary/DiaryRecommend'));
 const MyChallenge    = lazy(() => import('@/screens/challenge/MyChallenge'));
 const MyPage         = lazy(() => import('@/screens/my/MyPage'));
 const Settings       = lazy(() => import('@/screens/my/Settings'));
@@ -49,7 +51,6 @@ export const router = createBrowserRouter([
   { path: '/',                   element: wrap(<Splash />) },
   { path: '/onboarding/intro/1', element: wrap(<Intro1 />) },
   { path: '/onboarding/intro/2', element: wrap(<Intro2 />) },
-  { path: '/onboarding/intro/3', element: wrap(<Intro3 />) },
   { path: '/signup',             element: wrap(<Signup />) },
   { path: '/check/quiz',         element: wrap(<Quiz />) },
   { path: '/check/analyzing',    element: wrap(<Analyzing />) },
@@ -60,6 +61,9 @@ export const router = createBrowserRouter([
   { path: '/post/:id',           element: wrap(<PostDetail />) },
   { path: '/settings',           element: wrap(<Settings />) },
   { path: '/diary/write',        element: wrap(<DiaryWrite />) },
+  { path: '/diary/analyzing',    element: wrap(<DiaryAnalyzing />) },
+  { path: '/diary/result',       element: wrap(<DiaryResult />) },
+  { path: '/diary/recommend',    element: wrap(<DiaryRecommend />) },
   { path: '/challenge',          element: wrap(<MyChallenge />) },
 
   // ── 4 tab routes (Header + BottomNav)
