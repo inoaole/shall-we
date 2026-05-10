@@ -1,8 +1,63 @@
-export default function Placeholder() {
+import { useNavigate } from 'react-router-dom';
+import { useApp } from '@/store/AppContext';
+import { TodayCard } from '@/components/ui/Card';
+import { PostFeed } from '@/components/ui/PostFeed';
+import { CheckCircle } from 'lucide-react';
+
+export default function Home() {
+  const navigate = useNavigate();
+  const { state, dispatch } = useApp();
+
+  const activeChallenge = state.challenges[0];
+  const completedDays = activeChallenge
+    ? state.posts.filter((p) => p.challengeId === activeChallenge.id).length
+    : 0;
+
   return (
-    <div className="p-5 min-h-screen">
-      <h1 className="text-title-20 text-ink">홈 (9+10)</h1>
-      <p className="text-body-14 text-gray mt-2">Placeholder — implemented in later sprint.</p>
+    <div className="px-5 pt-4 space-y-6">
+      {activeChallenge ? (
+        <section>
+          <h2 className="text-subtitle-16 text-ink mb-3">오늘의 챌린지</h2>
+          <TodayCard
+            title={activeChallenge.title}
+            durationDays={activeChallenge.durationDays}
+            completedDays={completedDays}
+            onClick={() => navigate('/diary')}
+            rightSlot={
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate('/cert/upload');
+                }}
+                className="text-primary p-1"
+                aria-label="인증하기"
+              >
+                <CheckCircle size={28} />
+              </button>
+            }
+          />
+        </section>
+      ) : (
+        <section>
+          <div className="bg-white rounded-xl shadow-md p-8 text-center">
+            <p className="text-body-14 text-gray mb-4">아직 시작한 챌린지가 없어요</p>
+            <button
+              onClick={() => navigate('/create')}
+              className="text-subtitle-16 text-primary"
+            >
+              + 챌린지 추가하기
+            </button>
+          </div>
+        </section>
+      )}
+
+      <PostFeed
+        title="모두의 챌린지"
+        posts={state.feed}
+        viewMode={state.prefs.feedView}
+        onToggleView={() => dispatch({ type: 'TOGGLE_FEED_VIEW' })}
+        emptyMessage="아직 아무도 인증하지 않았어요"
+      />
     </div>
   );
 }
