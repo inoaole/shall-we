@@ -10,7 +10,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClass: Record<Variant, string> = {
-  primary:   'bg-primary text-white shadow-sm hover:brightness-105 disabled:bg-gray/30 disabled:text-white disabled:shadow-none',
+  primary:   'bg-primary text-white shadow-sm hover:brightness-105 disabled:bg-gray/20 disabled:text-gray disabled:shadow-none',
   secondary: 'bg-white text-primary border-[1.5px] border-primary disabled:text-gray disabled:border-gray/30 disabled:bg-bg-gray',
   social:    'bg-white text-ink border-[1.5px] border-gray/25 shadow-sm hover:bg-bg-gray',
 };
