@@ -31,7 +31,7 @@ export default function Splash() {
         />
         <img src="/logo/wordmark.png" alt="Shall We" className="h-7" />
       </div>
-      <p className="absolute bottom-10 text-body-12 text-gray">ver 0.1.1</p>
+      <p className="absolute bottom-10 text-body-12 text-gray">ver 0.1.2</p>
     </div>
   );
 }
