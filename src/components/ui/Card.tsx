@@ -10,8 +10,8 @@
  *     primary content (TodayCard title)
  */
 
-import { Plus } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { Plus, MoreHorizontal, type LucideIcon } from 'lucide-react';
+import { ProgressBar } from './ProgressBar';
 
 const baseCard =
   'bg-white rounded-xl border border-gray/15 shadow-sm active:scale-[0.99] transition-transform';
@@ -29,45 +29,35 @@ interface TodayCardProps {
   title: string;
   durationDays?: number;
   completedDays?: number;
-  rightSlot?: ReactNode;
   onClick?: () => void;
 }
 
-export function TodayCard({ title, durationDays, completedDays, rightSlot, onClick }: TodayCardProps) {
-  const body = (
-    <div className="flex-1 space-y-1 text-left">
-      <h3 className="text-subtitle-16 text-ink">{title}</h3>
-      {durationDays !== undefined && (
-        <p className="text-body-12 text-gray">{durationDays}일 챌린지</p>
-      )}
-      {completedDays !== undefined && completedDays > 0 && (
-        <p className="text-body-14 text-primary mt-2 font-medium">
-          벌써 {completedDays}일 완수!
-        </p>
-      )}
-    </div>
-  );
-
-  // rightSlot가 있을 때는 outer를 div로 렌더해 중첩 button을 회피.
-  // 본문(타이틀+기간+완수일)만 별도 button으로 wrap, rightSlot은 sibling.
-  if (rightSlot) {
-    return (
-      <div className={`${baseCard} p-4 flex items-start gap-3`}>
-        {onClick ? (
-          <button onClick={onClick} className="flex-1 text-left active:scale-[0.99] transition-transform">
-            {body}
-          </button>
-        ) : (
-          body
-        )}
-        {rightSlot}
-      </div>
-    );
-  }
+export function TodayCard({ title, durationDays, completedDays, onClick }: TodayCardProps) {
+  const showProgress =
+    durationDays !== undefined && completedDays !== undefined && durationDays > 0;
+  const progressValue = showProgress ? completedDays / durationDays : 0;
 
   return (
     <button onClick={onClick} className={`${baseCard} w-full text-left p-4`}>
-      {body}
+      <div className="flex items-start gap-3">
+        <div className="flex-1 space-y-1">
+          <h3 className="text-subtitle-16 text-ink">{title}</h3>
+          {durationDays !== undefined && (
+            <p className="text-body-12 text-gray">{durationDays}일 챌린지</p>
+          )}
+          {completedDays !== undefined && completedDays > 0 && (
+            <p className="text-body-14 text-primary mt-2 font-medium">
+              벌써 {completedDays}일 완수!
+            </p>
+          )}
+        </div>
+        <img src="/logo/symbol.png" alt="" className="w-10 h-10 shrink-0" />
+      </div>
+      {showProgress && (
+        <div className="mt-3">
+          <ProgressBar value={progressValue} />
+        </div>
+      )}
     </button>
   );
 }
@@ -122,33 +112,52 @@ export function FeedCard({ title, body, photoUrl, isPrivate, onClick, layout = '
 // ───────────────────────────────────────────────────────────────────────────
 
 interface RecommendCardProps {
-  shortTitle: string;
   action: string;
   mission: string;
   target: string;
   effect: string;
+  durationDays: number;
+  Icon: LucideIcon;
   onClick?: () => void;
 }
 
-export function RecommendCard({ shortTitle, action, mission, target, effect, onClick }: RecommendCardProps) {
+export function RecommendCard({
+  action,
+  mission,
+  target,
+  effect,
+  durationDays,
+  Icon,
+  onClick,
+}: RecommendCardProps) {
   return (
-    <button onClick={onClick} className={`${baseCard} text-left w-full p-5`}>
-      <p className="text-body-12 text-primary mb-1 font-semibold">{shortTitle}</p>
-      <h3 className="text-title-20 text-ink mb-5">{action}</h3>
-      <dl className="space-y-2.5 text-body-14">
-        <div className="flex gap-3">
-          <dt className="text-gray shrink-0 w-14">미션</dt>
-          <dd className="text-ink flex-1">{mission}</dd>
-        </div>
-        <div className="flex gap-3">
-          <dt className="text-gray shrink-0 w-14">대상</dt>
-          <dd className="text-ink/75 flex-1">{target}</dd>
-        </div>
-        <div className="flex gap-3">
-          <dt className="text-gray shrink-0 w-14">기대효과</dt>
-          <dd className="text-ink flex-1">{effect}</dd>
-        </div>
-      </dl>
+    <button onClick={onClick} className={`${baseCard} text-left w-full p-5 space-y-4`}>
+      {/* Header — ... + N일 pill */}
+      <div className="flex items-center justify-between">
+        <MoreHorizontal size={18} className="text-gray" aria-hidden />
+        <span className="px-2.5 py-0.5 bg-bg-gray text-ink text-body-12 rounded-md font-semibold">
+          {durationDays}일
+        </span>
+      </div>
+
+      {/* Hero — 옐로 + 카테고리 아이콘 */}
+      <div className="bg-yellow/35 rounded-2xl h-28 flex items-center justify-center">
+        <Icon size={40} strokeWidth={1.75} className="text-ink/70" />
+      </div>
+
+      {/* Title */}
+      <h3 className="text-title-20 text-ink leading-snug">{action}</h3>
+
+      {/* Mission pill */}
+      <div className="bg-bg-gray rounded-lg px-3 py-2">
+        <p className="text-body-14 text-ink">미션 : {mission}</p>
+      </div>
+
+      {/* Target */}
+      <p className="text-body-14 text-gray leading-relaxed">{target}</p>
+
+      {/* Effect */}
+      <p className="text-body-14 text-ink leading-relaxed">{effect}</p>
     </button>
   );
 }
