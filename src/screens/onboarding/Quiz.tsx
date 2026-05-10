@@ -72,13 +72,9 @@ export default function Quiz() {
 
   // Layout: PHQ-9 step과 preference step이 시각적으로 다름
   const isPreference = step.type === 'preference';
-  const sectionLabel = isPreference && stepIdx === phq9Questions.length
-    ? '챌린지 선호 조사'
-    : null;
-
-  // Phase indicator: PHQ-9 (1-9) vs Preference (10-14)
-  const phaseLabel =
-    stepIdx < phq9Questions.length ? '무기력 검사' : '챌린지 선호 조사';
+  // Phase transition label (선호조사 첫 step에만 노출)
+  const sectionLabel =
+    isPreference && stepIdx === phq9Questions.length ? '챌린지 선호 조사' : null;
 
   return (
     <div className="min-h-screen flex flex-col bg-bg-gray">
@@ -90,22 +86,17 @@ export default function Quiz() {
         >
           ←
         </button>
-        <div className="flex flex-col items-center">
-          <span className="text-body-12 text-primary font-semibold">{phaseLabel}</span>
-          <StepPagination current={stepIdx + 1} total={TOTAL} />
-        </div>
+        <StepPagination current={stepIdx + 1} total={TOTAL} />
         <span className="w-6" />
       </header>
 
-      <div className="px-5 mb-8">
-        <div className="bg-white rounded-full p-1 shadow-sm">
-          <ProgressBar value={(stepIdx + 1) / TOTAL} className="h-2" />
-        </div>
+      <div className="px-5 mb-10">
+        <ProgressBar value={(stepIdx + 1) / TOTAL} />
       </div>
 
       <div className="px-5 flex-1 flex flex-col">
         {sectionLabel && (
-          <p className="text-body-12 text-primary font-semibold mb-2">{sectionLabel}</p>
+          <p className="text-body-12 text-primary mb-3 font-semibold">{sectionLabel}</p>
         )}
         {isPreference ? (
           <h2 className="text-title-24 text-ink mb-10 text-center">{step.question}</h2>

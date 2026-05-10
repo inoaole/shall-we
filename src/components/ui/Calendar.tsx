@@ -16,10 +16,10 @@ interface CellProps {
 }
 
 const stateClass: Record<CellState, string> = {
-  'done':         'bg-primary text-white shadow-sm',
-  'missed':       'bg-white border-[1.5px] border-gray/25 text-ink',
-  'future':       'bg-gray/10 text-gray/60',
-  'today-empty':  'bg-white border-[1.5px] border-gray/25 text-ink',
+  'done':         'bg-primary text-white font-semibold',
+  'missed':       'bg-white border border-gray/30 text-ink/70',
+  'future':       'bg-bg-gray text-gray/60',
+  'today-empty':  'bg-white border border-gray/30 text-ink',
   'other-month':  'bg-transparent text-gray/40',
 };
 

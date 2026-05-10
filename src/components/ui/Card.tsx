@@ -1,19 +1,20 @@
 /**
- * Card variants — 4 separate components (D-S1.2: each variant is its own component
- * since the data shape differs, but co-located in the same file for discoverability).
+ * Card variants — 4 separate components (D-S1.2).
  *
- * S1 polish notes:
- *   - Stronger shadow + 1.5px border for definition (was bordering invisible
- *     against bg-bg-gray page)
- *   - TodayCard: green-tint background variant for "오늘 진행 중" emphasis
- *   - RecommendCard: yellow "추천" badge per design.md §5.3
- *   - All cards: active:scale press feedback
+ * v0.0.2 design polish:
+ *   - Subtraction default (Rams). Removed: TodayCard 그린 accent strip +
+ *     Sparkles badge. RecommendCard "추천" yellow badge. AddCard 점선 border.
+ *   - Unified surface treatment: bg-white + border + shadow-sm (calm, not loud)
+ *   - Padding 16pt (p-4) per design.md spec, not 20pt
+ *   - Typography: Sub Title 16 SemiBold for card titles, Title 20 only for
+ *     primary content (TodayCard title)
  */
 
-import { Plus, Sparkles } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import type { ReactNode } from 'react';
 
-const baseCard = 'bg-white rounded-xl shadow-md border border-gray/10 active:scale-[0.99] transition-transform';
+const baseCard =
+  'bg-white rounded-xl border border-gray/15 shadow-sm active:scale-[0.99] transition-transform';
 
 // ───────────────────────────────────────────────────────────────────────────
 // TodayCard — 오늘의 챌린지 (홈 / 다이어리에서 사용)
@@ -29,20 +30,17 @@ interface TodayCardProps {
 
 export function TodayCard({ title, durationDays, completedDays, rightSlot, onClick }: TodayCardProps) {
   return (
-    <button onClick={onClick} className={`${baseCard} w-full text-left p-5 relative overflow-hidden`}>
-      {/* Left accent strip */}
-      <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />
-      <div className="flex items-start justify-between gap-3 pl-2">
-        <div className="flex-1 space-y-2">
+    <button onClick={onClick} className={`${baseCard} w-full text-left p-4`}>
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex-1 space-y-1">
           <h3 className="text-title-20 text-ink">{title}</h3>
           {durationDays !== undefined && (
             <p className="text-body-12 text-gray">{durationDays}일 챌린지</p>
           )}
-          {completedDays !== undefined && (
-            <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-bg-green-tint text-primary text-body-12 font-semibold">
-              <Sparkles size={12} />
+          {completedDays !== undefined && completedDays > 0 && (
+            <p className="text-body-14 text-primary mt-2 font-medium">
               벌써 {completedDays}일 완수!
-            </div>
+            </p>
           )}
         </div>
         {rightSlot}
@@ -52,7 +50,7 @@ export function TodayCard({ title, durationDays, completedDays, rightSlot, onCli
 }
 
 // ───────────────────────────────────────────────────────────────────────────
-// FeedCard — 모두의 챌린지 / 내 게시글 카드
+// FeedCard — 모두의 챌린지 / 내 게시글
 // ───────────────────────────────────────────────────────────────────────────
 
 interface FeedCardProps {
@@ -78,26 +76,26 @@ export function FeedCard({ title, body, photoUrl, isPrivate, onClick, layout = '
           </div>
         )}
         <p className="text-subtitle-16 text-ink truncate">{title}</p>
-        <p className="text-body-12 text-gray mt-1 line-clamp-2">{body}</p>
+        <p className="text-body-12 text-gray mt-0.5 line-clamp-2 leading-snug">{body}</p>
         {isPrivate && (
-          <span className="text-body-12 text-gray mt-1.5 inline-block">🔒 비공개</span>
+          <span className="text-body-12 text-gray mt-1 inline-block">🔒</span>
         )}
       </button>
     );
   }
   return (
-    <button onClick={onClick} className={`${baseCard} w-full text-left p-5`}>
-      <div className="flex items-start justify-between gap-2 mb-2">
+    <button onClick={onClick} className={`${baseCard} w-full text-left p-4`}>
+      <div className="flex items-start justify-between gap-2 mb-1.5">
         <p className="text-subtitle-16 text-ink">{title}</p>
-        {isPrivate && <span className="text-body-12 text-gray shrink-0">🔒 비공개</span>}
+        {isPrivate && <span className="text-body-12 text-gray shrink-0">🔒</span>}
       </div>
-      <p className="text-body-14 text-ink/80 line-clamp-3 whitespace-pre-line leading-relaxed">{body}</p>
+      <p className="text-body-14 text-ink/75 line-clamp-3 whitespace-pre-line leading-relaxed">{body}</p>
     </button>
   );
 }
 
 // ───────────────────────────────────────────────────────────────────────────
-// RecommendCard — 추천 챌린지 (캐러셀에서 사용)
+// RecommendCard — 추천 챌린지
 // ───────────────────────────────────────────────────────────────────────────
 
 interface RecommendCardProps {
@@ -111,24 +109,29 @@ interface RecommendCardProps {
 
 export function RecommendCard({ shortTitle, action, mission, target, effect, onClick }: RecommendCardProps) {
   return (
-    <button onClick={onClick} className={`${baseCard} text-left w-full p-5 relative`}>
-      {/* "추천" badge — design.md §5.3 */}
-      <span className="absolute top-4 right-4 px-2 py-0.5 rounded-full bg-yellow text-gold text-body-12 font-semibold">
-        추천
-      </span>
-      <p className="text-body-12 text-gray mb-1">{shortTitle}</p>
-      <h3 className="text-title-20 text-ink mb-4 pr-12">{action}</h3>
-      <div className="space-y-2 text-body-14">
-        <p className="text-ink"><span className="text-gray">미션</span>  {mission}</p>
-        <p className="text-gray italic">{target}</p>
-        <p className="text-ink"><span className="text-gray">기대효과</span>  {effect}</p>
-      </div>
+    <button onClick={onClick} className={`${baseCard} text-left w-full p-5`}>
+      <p className="text-body-12 text-primary mb-1 font-semibold">{shortTitle}</p>
+      <h3 className="text-title-20 text-ink mb-5">{action}</h3>
+      <dl className="space-y-2.5 text-body-14">
+        <div className="flex gap-3">
+          <dt className="text-gray shrink-0 w-14">미션</dt>
+          <dd className="text-ink flex-1">{mission}</dd>
+        </div>
+        <div className="flex gap-3">
+          <dt className="text-gray shrink-0 w-14">대상</dt>
+          <dd className="text-ink/75 flex-1">{target}</dd>
+        </div>
+        <div className="flex gap-3">
+          <dt className="text-gray shrink-0 w-14">기대효과</dt>
+          <dd className="text-ink flex-1">{effect}</dd>
+        </div>
+      </dl>
     </button>
   );
 }
 
 // ───────────────────────────────────────────────────────────────────────────
-// AddCard — 챌린지 추가 진입 카드 (인증 탭, 추천 하단)
+// AddCard — 챌린지 추가 진입
 // ───────────────────────────────────────────────────────────────────────────
 
 interface AddCardProps {
@@ -141,13 +144,11 @@ export function AddCard({ label = '챌린지 추가', caption, onClick }: AddCar
   return (
     <button
       onClick={onClick}
-      className="w-full bg-bg-green-tint border-[1.5px] border-dashed border-primary/40 rounded-xl p-7 flex flex-col items-center gap-2 active:scale-[0.99] transition-transform"
+      className="w-full bg-bg-green-tint rounded-xl p-6 flex flex-col items-center gap-2 active:scale-[0.99] transition-transform"
     >
-      <div className="w-12 h-12 rounded-full bg-primary/15 flex items-center justify-center">
-        <Plus size={24} className="text-primary" strokeWidth={2.25} />
-      </div>
-      <p className="text-subtitle-16 text-ink">{label}</p>
-      {caption && <p className="text-body-12 text-gray">{caption}</p>}
+      <Plus size={28} className="text-primary" strokeWidth={2.25} />
+      <p className="text-subtitle-16 text-primary">{label}</p>
+      {caption && <p className="text-body-12 text-ink/60">{caption}</p>}
     </button>
   );
 }
