@@ -22,6 +22,7 @@ import { TabLayout } from '@/components/layout/TabLayout';
 const Splash         = lazy(() => import('@/screens/onboarding/Splash'));
 const Intro1         = lazy(() => import('@/screens/onboarding/Intro1'));
 const Intro2         = lazy(() => import('@/screens/onboarding/Intro2'));
+const Intro3         = lazy(() => import('@/screens/onboarding/Intro3'));
 const Signup         = lazy(() => import('@/screens/onboarding/Signup'));
 const Quiz           = lazy(() => import('@/screens/onboarding/Quiz'));
 const Analyzing      = lazy(() => import('@/screens/onboarding/Analyzing'));
@@ -46,6 +47,7 @@ export const router = createBrowserRouter([
   { path: '/',                   element: wrap(<Splash />) },
   { path: '/onboarding/intro/1', element: wrap(<Intro1 />) },
   { path: '/onboarding/intro/2', element: wrap(<Intro2 />) },
+  { path: '/onboarding/intro/3', element: wrap(<Intro3 />) },
   { path: '/signup',             element: wrap(<Signup />) },
   { path: '/check/quiz',         element: wrap(<Quiz />) },
   { path: '/check/analyzing',    element: wrap(<Analyzing />) },
