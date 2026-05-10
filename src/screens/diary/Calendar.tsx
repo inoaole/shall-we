@@ -40,17 +40,25 @@ export default function Diary() {
     <div className="px-5 pt-4 space-y-5">
       {activeChallenge ? (
         <>
-          {/* Progress card */}
-          <section className="bg-white rounded-xl shadow-md p-5">
-            <h2 className="text-title-20 text-ink mb-2">{activeChallenge.title}</h2>
-            <p className="text-body-14 text-ink mb-3">
-              <span className="text-title-20 text-primary">{completedDays}</span>
-              <span className="text-gray">일 / {activeChallenge.durationDays}일</span>
+          {/* Progress card — logo + 챌린지 이름 + 진행 (figma 40000611:5571 참조) */}
+          <section className="bg-white rounded-xl border border-gray/15 shadow-sm p-6 flex flex-col items-center text-center">
+            <img src="/logo/symbol.png" alt="" className="w-14 h-14 mb-3" />
+            <span className="inline-block px-2.5 py-0.5 bg-bg-green-tint text-primary text-body-12 rounded-full mb-2 font-medium">
+              {activeChallenge.durationDays}일 챌린지
+            </span>
+            <h2 className="text-title-20 text-ink mb-5">{activeChallenge.title}</h2>
+            <p className="text-body-14 mb-3 self-stretch flex justify-between items-baseline">
+              <span>
+                <span className="text-title-20 text-primary font-semibold">{completedDays}일</span>
+                <span className="text-gray"> / {activeChallenge.durationDays}일</span>
+              </span>
+              <span className="text-body-12 text-gray">
+                {completedDays > 0 ? `완수 ${completedDays}일차` : '시작 전'}
+              </span>
             </p>
-            <ProgressBar value={completedDays / activeChallenge.durationDays} />
-            <p className="text-body-12 text-gray mt-3">
-              {completedDays > 0 ? `완수 - ${completedDays}일차` : '오늘부터 시작!'}
-            </p>
+            <div className="w-full">
+              <ProgressBar value={completedDays / activeChallenge.durationDays} />
+            </div>
           </section>
 
           {/* Calendar */}
