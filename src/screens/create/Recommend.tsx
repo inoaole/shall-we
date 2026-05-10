@@ -1,7 +1,8 @@
 /**
  * Recommend — 챌린지 추천 horizontal carousel (embla).
  *
- * D-S3.2: card tap → immediate ADD_CHALLENGE (default days from rec data) → home.
+ * 카드 탭 → RecommendDialog (Figma 40000625:206 정합) → 확인 시 ADD_CHALLENGE → home.
+ * 아니요 / Esc / backdrop → 다이얼로그 닫고 carousel 유지.
  * Direct create는 하단 "직접 만들기" 카드 탭으로.
  */
 
@@ -10,35 +11,43 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/store/AppContext';
 import { RecommendCard, AddCard } from '@/components/ui/Card';
+import { Modal } from '@/components/ui/Modal';
 import { BackHeader } from '@/components/layout/BackHeader';
 import { uuid } from '@/utils/id';
 import { notify } from '@/utils/notify';
 import recommendations from '@/mocks/recommendations.json';
+import { RecommendDialog } from './RecommendDialog';
+import { recIcon } from '@/utils/rec-icon';
+
+type Recommendation = (typeof recommendations)[number];
 
 export default function Recommend() {
   const navigate = useNavigate();
   const { dispatch } = useApp();
   const [emblaRef, embla] = useEmblaCarousel({ loop: false, align: 'center' });
   const [selectedIdx, setSelectedIdx] = useState(0);
+  const [pendingRec, setPendingRec] = useState<Recommendation | null>(null);
 
   // Track selected slide for indicator
   if (embla) {
     embla.on('select', () => setSelectedIdx(embla.selectedScrollSnap()));
   }
 
-  const handleStart = (rec: typeof recommendations[0]) => {
+  const handleConfirm = () => {
+    if (!pendingRec) return;
     dispatch({
       type: 'ADD_CHALLENGE',
       payload: {
         id: uuid(),
-        title: rec.action,
-        durationDays: rec.durationDays,
-        mission: rec.mission,
-        effect: rec.effect,
+        title: pendingRec.action,
+        durationDays: pendingRec.durationDays,
+        mission: pendingRec.mission,
+        effect: pendingRec.effect,
         startedAt: new Date().toISOString(),
       },
     });
-    notify.challengeAdded(rec.action);
+    notify.challengeAdded(pendingRec.action);
+    setPendingRec(null);
     navigate('/home');
   };
 
@@ -52,12 +61,13 @@ export default function Recommend() {
             {recommendations.map((rec) => (
               <div key={rec.id} className="flex-[0_0_85%] mr-3 first:ml-5 last:mr-5">
                 <RecommendCard
-                  shortTitle={rec.shortTitle}
                   action={rec.action}
                   mission={rec.mission}
                   target={rec.target}
                   effect={rec.effect}
-                  onClick={() => handleStart(rec)}
+                  durationDays={rec.durationDays}
+                  Icon={recIcon(rec.icon)}
+                  onClick={() => setPendingRec(rec)}
                 />
               </div>
             ))}
@@ -84,6 +94,20 @@ export default function Recommend() {
           onClick={() => navigate('/create/new')}
         />
       </div>
+
+      <Modal
+        open={pendingRec !== null}
+        onClose={() => setPendingRec(null)}
+        ariaLabel="챌린지 추가 확인"
+      >
+        {pendingRec && (
+          <RecommendDialog
+            rec={pendingRec}
+            onConfirm={handleConfirm}
+            onCancel={() => setPendingRec(null)}
+          />
+        )}
+      </Modal>
     </div>
   );
 }

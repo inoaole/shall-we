@@ -3,7 +3,7 @@ import { useApp } from '@/store/AppContext';
 import { TodayCard } from '@/components/ui/Card';
 import { PostFeed } from '@/components/ui/PostFeed';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { CheckCircle, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -24,18 +24,6 @@ export default function Home() {
             durationDays={activeChallenge.durationDays}
             completedDays={completedDays}
             onClick={() => navigate('/challenge')}
-            rightSlot={
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate('/cert/upload');
-                }}
-                className="text-primary p-1"
-                aria-label="인증하기"
-              >
-                <CheckCircle size={28} />
-              </button>
-            }
           />
         </section>
       ) : (

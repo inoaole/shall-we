@@ -20,6 +20,7 @@ import { ProgressBar } from '@/components/ui/ProgressBar';
 import { StepPagination } from '@/components/ui/StepPagination';
 import { Calendar, CalendarCell, type CellState } from '@/components/ui/Calendar';
 import { Loading } from '@/components/ui/Loading';
+import { Cloud } from 'lucide-react';
 
 function Section({ title, sub, children }: { title: string; sub?: string; children: React.ReactNode }) {
   return (
@@ -143,11 +144,12 @@ export default function DevComponents() {
           isPrivate
         />
         <RecommendCard
-          shortTitle="하늘 바라보기"
           action="하루에 한 번 하늘 보기"
           mission="고개 들어서 하늘 한 번 보기"
           target="스마트폰 보다 거북목 되기 직전인 당신에게"
           effect="거북목 스트레칭과 한숨 돌리기"
+          durationDays={7}
+          Icon={Cloud}
         />
         <AddCard caption="나만의 목표를 세워보세요!" />
       </Section>

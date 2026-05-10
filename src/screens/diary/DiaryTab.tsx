@@ -22,11 +22,11 @@ import { Button } from '@/components/ui/Button';
 import { moodCellState, type MoodCellState } from '@/utils/diary';
 
 const moodCellClass: Record<MoodCellState, string> = {
-  positive: 'bg-bg-green-tint text-ink',
-  neutral: 'bg-gray/10 text-ink',
-  negative: 'bg-yellow/40 text-ink',
-  empty: 'bg-bg-gray text-ink/70',
-  future: 'bg-bg-gray text-gray/50',
+  positive: 'bg-primary text-white font-semibold',
+  neutral: 'bg-bg-green-tint text-ink',
+  negative: 'bg-yellow text-ink',
+  empty: 'bg-white border border-gray/30 text-ink',
+  future: 'bg-bg-gray text-gray/60',
   'other-month': 'bg-transparent text-gray/40',
 };
 
@@ -71,22 +71,18 @@ export default function DiaryTab() {
           cells={cells}
           renderCell={(c, onClick) => {
             const interactive = c.state === 'positive' || c.state === 'negative' || c.state === 'neutral';
-            const isPositive = c.state === 'positive';
             return (
               <button
                 onClick={interactive ? onClick : undefined}
                 disabled={!interactive}
                 aria-label={`${c.day}일 ${moodLabel[c.state]}${c.isToday ? ', 오늘' : ''}`}
-                className={`w-10 h-12 rounded-2xl flex flex-col items-center justify-center gap-0.5 text-body-14 transition-all ${
+                className={`w-10 h-10 rounded-md flex items-center justify-center text-body-14 transition-all ${
                   moodCellClass[c.state]
                 } ${c.isToday ? 'ring-[1.5px] ring-primary ring-offset-1' : ''} ${
                   interactive ? 'active:scale-[0.95]' : 'cursor-default'
                 }`}
               >
-                <span className={c.isToday ? 'font-semibold' : ''}>{c.day}</span>
-                {isPositive && (
-                  <img src="/logo/symbol.png" alt="" className="w-3.5 h-3.5" />
-                )}
+                {c.day}
               </button>
             );
           }}
@@ -95,16 +91,16 @@ export default function DiaryTab() {
         />
         <div className="flex flex-wrap gap-3 mt-5 pt-4 border-t border-gray/10 text-body-12 text-gray">
           <span className="inline-flex items-center gap-1.5">
-            <span className="w-4 h-4 rounded-lg bg-bg-green-tint inline-flex items-center justify-center">
-              <img src="/logo/symbol.png" alt="" className="w-2.5 h-2.5" />
-            </span>{' '}
-            긍정적
+            <span className="w-3 h-3 rounded-md bg-primary" /> 긍정적
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <span className="w-4 h-4 rounded-lg bg-gray/10" /> 중립
+            <span className="w-3 h-3 rounded-md bg-bg-green-tint" /> 중립
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <span className="w-4 h-4 rounded-lg bg-yellow/40" /> 부정적
+            <span className="w-3 h-3 rounded-md bg-yellow" /> 부정적
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="w-3 h-3 rounded-md bg-white border border-gray/30" /> 기록 없음
           </span>
         </div>
       </section>
