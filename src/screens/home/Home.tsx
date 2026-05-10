@@ -2,7 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/store/AppContext';
 import { TodayCard } from '@/components/ui/Card';
 import { PostFeed } from '@/components/ui/PostFeed';
-import { CheckCircle } from 'lucide-react';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { CheckCircle, Plus } from 'lucide-react';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -39,15 +40,11 @@ export default function Home() {
         </section>
       ) : (
         <section>
-          <div className="bg-white rounded-xl shadow-md p-8 text-center">
-            <p className="text-body-14 text-gray mb-4">아직 시작한 챌린지가 없어요</p>
-            <button
-              onClick={() => navigate('/create')}
-              className="text-subtitle-16 text-primary"
-            >
-              + 챌린지 추가하기
-            </button>
-          </div>
+          <EmptyState
+            icon={<Plus size={28} />}
+            message="아직 시작한 챌린지가 없어요"
+            action={{ label: '챌린지 추가하기', onClick: () => navigate('/create') }}
+          />
         </section>
       )}
 

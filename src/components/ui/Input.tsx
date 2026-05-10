@@ -14,13 +14,13 @@ export const Input = forwardRef<HTMLInputElement, Props>(
         ref={ref}
         className={`w-full h-12 px-4 rounded-md bg-white border-[1.5px] text-body-14 text-ink placeholder:text-gray/70 focus:outline-none transition-colors ${
           error
-            ? 'border-red-500 focus:border-red-500'
+            ? 'border-danger focus:border-danger'
             : 'border-gray/25 focus:border-primary'
         } ${className}`}
         {...rest}
       />
       {(error || helper) && (
-        <p className={`text-body-12 ${error ? 'text-red-500' : 'text-gray'}`}>
+        <p className={`text-body-12 ${error ? 'text-danger' : 'text-gray'}`}>
           {error || helper}
         </p>
       )}

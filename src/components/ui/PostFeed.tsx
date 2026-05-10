@@ -11,6 +11,7 @@
 import { LayoutGrid, AlignJustify } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { FeedCard } from './Card';
+import { EmptyState } from './EmptyState';
 import type { Post, FeedView } from '@/store/AppContext';
 
 interface Props {
@@ -61,17 +62,7 @@ export function PostFeed({
       </div>
 
       {posts.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-md p-8 text-center">
-          <p className="text-body-14 text-gray mb-4">{emptyMessage}</p>
-          {emptyAction && (
-            <button
-              onClick={emptyAction.onClick}
-              className="text-subtitle-16 text-primary"
-            >
-              {emptyAction.label}
-            </button>
-          )}
-        </div>
+        <EmptyState message={emptyMessage} action={emptyAction} />
       ) : viewMode === 'grid' ? (
         <div className="grid grid-cols-2 gap-3">
           {posts.map((p) => (

@@ -3,6 +3,7 @@ import { ChevronRight } from 'lucide-react';
 import { useApp } from '@/store/AppContext';
 import { clearStorage } from '@/utils/storage';
 import { notify } from '@/utils/notify';
+import { BackHeader } from '@/components/layout/BackHeader';
 
 interface RowProps {
   label: string;
@@ -26,8 +27,10 @@ function Row({ label, onClick, trailing }: RowProps) {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <h2 className="text-body-12 text-gray px-5 pt-4 pb-1 font-medium">{title}</h2>
-      <div className="bg-white rounded-xl shadow-md mx-5 divide-y divide-gray/10 overflow-hidden">
+      <h2 className="text-body-12 text-gray uppercase tracking-wide px-5 pt-4 pb-1 font-medium">
+        {title}
+      </h2>
+      <div className="bg-white rounded-xl border border-gray/15 mx-5 divide-y divide-gray/10 overflow-hidden">
         {children}
       </div>
     </section>
@@ -54,16 +57,7 @@ export default function Settings() {
 
   return (
     <div className="min-h-screen bg-bg-gray pb-10">
-      <header className="px-5 pt-4 pb-3 flex items-center bg-white border-b border-gray/10 sticky top-0 z-10">
-        <button
-          onClick={() => navigate(-1)}
-          className="text-2xl text-ink leading-none -ml-1 px-1 active:scale-90 transition-transform"
-          aria-label="뒤로가기"
-        >
-          ←
-        </button>
-        <h1 className="ml-2 text-title-20 text-ink">설정</h1>
-      </header>
+      <BackHeader title="설정" sticky />
 
       <Section title="알림">
         <Row label="알림 설정" onClick={() => notify.error('알림 설정은 아직 준비 중이에요.')} />
@@ -72,7 +66,7 @@ export default function Settings() {
       <Section title="앱">
         <Row label="이용약관" onClick={() => notify.error('이용약관은 아직 준비 중이에요.')} />
         <Row label="개인정보 처리방침" onClick={() => notify.error('개인정보 처리방침은 아직 준비 중이에요.')} />
-        <Row label="버전" trailing={<span className="text-body-12 text-gray">ver 0.0.4</span>} />
+        <Row label="버전" trailing={<span className="text-body-12 text-gray">ver 0.0.5</span>} />
       </Section>
 
       <Section title="계정">

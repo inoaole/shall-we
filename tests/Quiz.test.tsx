@@ -63,14 +63,11 @@ describe('Quiz', () => {
       fireEvent.click(screen.getByRole('radio', { name: '며칠 그랬다' }));
       fireEvent.click(screen.getByRole('button', { name: /다음|결과 보기/ }));
     }
-    // step 10~14 (preference): 양극 2개 중 하나 선택
+    // step 10~14 (preference): 양극 2개 중 하나 선택 (PoleChoice — role="radio")
     for (let i = 10; i <= 14; i++) {
-      const buttons = screen.getAllByRole('button');
+      const radios = screen.getAllByRole('radio');
       // 첫 번째 옵션 (left pole) 클릭
-      const optBtn = buttons.find((b) =>
-        b.getAttribute('aria-pressed') !== null && b.textContent !== '이전'
-      );
-      if (optBtn) fireEvent.click(optBtn);
+      if (radios[0]) fireEvent.click(radios[0]);
       const next = screen.getByRole('button', { name: /다음|결과 보기/ });
       if (i < 14) fireEvent.click(next);
     }

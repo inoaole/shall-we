@@ -5,6 +5,7 @@ import { useApp } from '@/store/AppContext';
 import { Calendar as CalendarUI } from '@/components/ui/Calendar';
 import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/ProgressBar';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { cellState } from '@/utils/date';
 
 export default function Diary() {
@@ -84,13 +85,10 @@ export default function Diary() {
           </section>
         </>
       ) : (
-        <section className="bg-white rounded-xl shadow-md p-8 text-center">
-          <p className="text-body-14 text-gray mb-4">
-            아직 진행 중인 챌린지가 없어요.<br />
-            먼저 챌린지를 시작해보세요!
-          </p>
-          <Button onClick={() => navigate('/create')}>챌린지 시작하기</Button>
-        </section>
+        <EmptyState
+          message="아직 진행 중인 챌린지가 없어요"
+          action={{ label: '챌린지 시작하기', onClick: () => navigate('/create') }}
+        />
       )}
     </div>
   );

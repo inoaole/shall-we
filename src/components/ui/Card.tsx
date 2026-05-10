@@ -18,6 +18,11 @@ const baseCard =
 
 // ───────────────────────────────────────────────────────────────────────────
 // TodayCard — 오늘의 챌린지 (홈 / 다이어리에서 사용)
+// design.md §5.3: 챌린지명 (Sub Title 16) / 기간 (Body 12) / 누적 완수일 (Body 14)
+//
+// v0.0.5: typography 환원 (Title 20 → Sub Title 16). rightSlot/onClick는
+// 둘 중 하나만 사용 (중첩 button a11y 위반 방지). rightSlot이 있으면
+// outer는 button이 아닌 div로 렌더, onClick만 있으면 button.
 // ───────────────────────────────────────────────────────────────────────────
 
 interface TodayCardProps {
@@ -29,22 +34,40 @@ interface TodayCardProps {
 }
 
 export function TodayCard({ title, durationDays, completedDays, rightSlot, onClick }: TodayCardProps) {
-  return (
-    <button onClick={onClick} className={`${baseCard} w-full text-left p-4`}>
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex-1 space-y-1">
-          <h3 className="text-title-20 text-ink">{title}</h3>
-          {durationDays !== undefined && (
-            <p className="text-body-12 text-gray">{durationDays}일 챌린지</p>
-          )}
-          {completedDays !== undefined && completedDays > 0 && (
-            <p className="text-body-14 text-primary mt-2 font-medium">
-              벌써 {completedDays}일 완수!
-            </p>
-          )}
-        </div>
+  const body = (
+    <div className="flex-1 space-y-1 text-left">
+      <h3 className="text-subtitle-16 text-ink">{title}</h3>
+      {durationDays !== undefined && (
+        <p className="text-body-12 text-gray">{durationDays}일 챌린지</p>
+      )}
+      {completedDays !== undefined && completedDays > 0 && (
+        <p className="text-body-14 text-primary mt-2 font-medium">
+          벌써 {completedDays}일 완수!
+        </p>
+      )}
+    </div>
+  );
+
+  // rightSlot가 있을 때는 outer를 div로 렌더해 중첩 button을 회피.
+  // 본문(타이틀+기간+완수일)만 별도 button으로 wrap, rightSlot은 sibling.
+  if (rightSlot) {
+    return (
+      <div className={`${baseCard} p-4 flex items-start gap-3`}>
+        {onClick ? (
+          <button onClick={onClick} className="flex-1 text-left active:scale-[0.99] transition-transform">
+            {body}
+          </button>
+        ) : (
+          body
+        )}
         {rightSlot}
       </div>
+    );
+  }
+
+  return (
+    <button onClick={onClick} className={`${baseCard} w-full text-left p-4`}>
+      {body}
     </button>
   );
 }

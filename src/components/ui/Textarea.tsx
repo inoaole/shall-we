@@ -15,13 +15,13 @@ export const Textarea = forwardRef<HTMLTextAreaElement, Props>(
         rows={rows}
         className={`w-full px-4 py-3 rounded-md bg-white border-[1.5px] text-body-14 text-ink placeholder:text-gray/70 focus:outline-none resize-y min-h-[120px] transition-colors leading-relaxed ${
           error
-            ? 'border-red-500 focus:border-red-500'
+            ? 'border-danger focus:border-danger'
             : 'border-gray/25 focus:border-primary'
         } ${className}`}
         {...rest}
       />
       {(error || helper) && (
-        <p className={`text-body-12 ${error ? 'text-red-500' : 'text-gray'}`}>
+        <p className={`text-body-12 ${error ? 'text-danger' : 'text-gray'}`}>
           {error || helper}
         </p>
       )}

@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { useApp } from '@/store/AppContext';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { BackHeader } from '@/components/layout/BackHeader';
 import { notify } from '@/utils/notify';
 
 const signupSchema = z.object({
@@ -54,20 +55,14 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen px-5 pt-4 pb-10 bg-bg-gray">
-      <button
-        onClick={() => navigate(-1)}
-        className="text-2xl text-ink leading-none -ml-1 px-1 py-2 active:scale-90 transition-transform"
-        aria-label="뒤로가기"
-      >
-        ←
-      </button>
+    <div className="min-h-screen pb-10 bg-bg-gray">
+      <BackHeader />
 
-      <h1 className="text-title-24 text-ink mt-4 mb-8">
+      <h1 className="text-title-24 text-ink mt-4 mb-8 px-5">
         무기력 검사 전<br />회원가입을 진행해주세요!
       </h1>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 px-5">
         <Input
           label="닉네임"
           placeholder="Shall We"
@@ -96,19 +91,21 @@ export default function Signup() {
         </div>
       </form>
 
-      <div className="flex items-center gap-3 my-6">
+      <div className="flex items-center gap-3 my-6 px-5">
         <div className="flex-1 h-px bg-gray/25" />
         <span className="text-body-12 text-gray">또는</span>
         <div className="flex-1 h-px bg-gray/25" />
       </div>
 
-      <Button
-        variant="social"
-        leftIcon={<span className="font-bold text-lg">G</span>}
-        onClick={handleGoogle}
-      >
-        구글로 계속
-      </Button>
+      <div className="px-5">
+        <Button
+          variant="social"
+          leftIcon={<span className="font-bold">G</span>}
+          onClick={handleGoogle}
+        >
+          구글로 계속
+        </Button>
+      </div>
     </div>
   );
 }
