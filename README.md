@@ -3,7 +3,7 @@
 > '쉬었음 청년'을 위한 AI 감정기록 챌린지 서비스
 > 연세대 UXIM 3팀(레디액션) — React 프로토타입
 
-[![version](https://img.shields.io/badge/version-0.0.3-24D455)]() [![sprints](https://img.shields.io/badge/sprints-S1·S2·S3·S4-24D455)]() [![tests](https://img.shields.io/badge/tests-19_pass-24D455)]()
+[![version](https://img.shields.io/badge/version-0.1.0-24D455)]() [![sprints](https://img.shields.io/badge/sprints-S1·S2·S3·S4-24D455)]() [![tests](https://img.shields.io/badge/tests-19_pass-24D455)]() [![deploy](https://img.shields.io/badge/vercel-ready-24D455)]()
 
 <p>
   <img src="./assets/logo/symbol.png" width="80" alt="ShallWe symbol">
@@ -87,7 +87,9 @@ npm run dev
 - [x] **S2 — Onboarding Flow** (v0.0.1) : Splash → Quiz 14 step → Result 풀 클릭
 - [x] **S3 — Main App** (v0.0.2) : 4탭 + 챌린지 만들기/인증 풀 cycle
 - [x] **S4 — Polish & Demo Ready** (v0.0.3) : sonner 토스트 / fade-in 화면 전환 / 반응형
-- [ ] **(옵션) Vercel 배포 + UT 일정**
+- [x] **Design Cleanup** (v0.0.5) : BackHeader · EmptyState 추출 / 토큰 정확성 / a11y
+- [x] **Vercel 배포 준비** (v0.1.0) : `vercel.json` SPA fallback + 정적 자원 캐싱
+- [ ] **(옵션) UT 일정 + 백엔드 연동**
 
 ## 팀
 
