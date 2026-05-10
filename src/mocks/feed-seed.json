@@ -1,0 +1,52 @@
+[
+  {
+    "id": "seed-1",
+    "challengeId": "seed-c-1",
+    "challengeTitle": "산책 30분 하기",
+    "photoUrl": "https://picsum.photos/seed/1/600/600",
+    "text": "오늘 날씨가 정말 좋아서 한강에 다녀왔어요! 30분 걸었더니 우울한 기분이 사라지고 긍정적인 생각이 들었어요. 산책하는 강아지를 세 마리 봤는데 기분이 정말 좋아지더라구요!",
+    "isPublic": true,
+    "date": "2026-05-09T14:30:00",
+    "authorNickname": "초록잎"
+  },
+  {
+    "id": "seed-2",
+    "challengeId": "seed-c-2",
+    "challengeTitle": "하늘 바라보기",
+    "photoUrl": "https://picsum.photos/seed/2/600/600",
+    "text": "고개를 들어 하늘을 한 번 봤어요. 거북목이 펴지는 느낌이 들고, 오랜만에 푸른 하늘을 보니 마음이 평온해지네요.",
+    "isPublic": true,
+    "date": "2026-05-09T11:00:00",
+    "authorNickname": "구름맨"
+  },
+  {
+    "id": "seed-3",
+    "challengeId": "seed-c-1",
+    "challengeTitle": "산책 30분 하기",
+    "photoUrl": "https://picsum.photos/seed/3/600/600",
+    "text": "오늘 날씨가 너무 좋아서 가벼운 발걸음으로 30분 걸었습니다.",
+    "isPublic": true,
+    "date": "2026-05-08T17:00:00",
+    "authorNickname": "걷는사람"
+  },
+  {
+    "id": "seed-4",
+    "challengeId": "seed-c-3",
+    "challengeTitle": "물 8잔 마시기",
+    "photoUrl": "https://picsum.photos/seed/4/600/600",
+    "text": "물 마시는 걸 자꾸 잊어버렸는데, 챌린지로 만드니까 의식적으로 챙기게 되네요!",
+    "isPublic": true,
+    "date": "2026-05-08T19:30:00",
+    "authorNickname": "물한잔"
+  },
+  {
+    "id": "seed-5",
+    "challengeId": "seed-c-4",
+    "challengeTitle": "감사일기 쓰기",
+    "photoUrl": "https://picsum.photos/seed/5/600/600",
+    "text": "오늘은 친구가 보내준 따뜻한 메시지에 감사한 마음이 들었어요. 작은 것부터 적기 시작하니 마음이 한결 가벼워집니다.",
+    "isPublic": true,
+    "date": "2026-05-07T22:00:00",
+    "authorNickname": "햇살"
+  }
+]

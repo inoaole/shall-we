@@ -1,0 +1,47 @@
+[
+  {
+    "id": "rec-1",
+    "shortTitle": "하늘 바라보기",
+    "action": "하루에 한 번 하늘 보기",
+    "mission": "고개 들어서 하늘 한 번 보기",
+    "target": "스마트폰 보다 거북목 되기 직전인 당신에게",
+    "effect": "거북목 스트레칭과 한숨 돌리기",
+    "durationDays": 7
+  },
+  {
+    "id": "rec-2",
+    "shortTitle": "한 걸음의 기록",
+    "action": "산책 10분 하기",
+    "mission": "현관 밖 10분 걷기",
+    "target": "방 안에만 있던 당신에게",
+    "effect": "햇빛 + 가벼운 운동으로 기분 환기",
+    "durationDays": 7
+  },
+  {
+    "id": "rec-3",
+    "shortTitle": "물 한 잔의 여유",
+    "action": "하루 물 8잔 마시기",
+    "mission": "한 시간마다 물 한 컵 마시기",
+    "target": "커피·음료에 의존하던 당신에게",
+    "effect": "수분 보충 + 화장실 가는 길에 가볍게 스트레칭",
+    "durationDays": 14
+  },
+  {
+    "id": "rec-4",
+    "shortTitle": "감사 한 줄",
+    "action": "잠들기 전 감사일기 쓰기",
+    "mission": "오늘 감사한 것 1가지 적기",
+    "target": "하루의 부정적 감정에 매몰되는 당신에게",
+    "effect": "긍정 정서 강화 + 수면 전 마음 정리",
+    "durationDays": 21
+  },
+  {
+    "id": "rec-5",
+    "shortTitle": "느긋한 아침",
+    "action": "기상 직후 5분 스트레칭",
+    "mission": "이불 위에서 5분 스트레칭",
+    "target": "아침이 무겁게 느껴지는 당신에게",
+    "effect": "혈류 증가 + 무기력감 완화",
+    "durationDays": 14
+  }
+]

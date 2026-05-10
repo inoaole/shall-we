@@ -9,7 +9,7 @@
 
 import { notify } from './notify';
 
-const VERSION = 'v1';
+const VERSION = 'v2';
 export const STORAGE_KEY = `shallwe.app.${VERSION}`;
 
 export function readStorage<T>(key: string = STORAGE_KEY): T | null {

@@ -13,9 +13,10 @@ export const levelMessage: Record<Level, string> = {
   '높음': '오늘은 천천히, 작은 챌린지부터\n시작해도 충분해요.',
 };
 
-/** PHQ-9 9번(자해 관련) 1점 이상 시 노출 */
+/** PHQ-9 9번(자해 관련) 1점 이상 시 노출.
+ * 사용자 결정으로 비활성화. 향후 재검토 시 enabled: true로. */
 export const SUICIDE_PREVENTION = {
-  enabled: true,
+  enabled: false,
   message: '힘들 때는 혼자 견디지 마세요.',
   hotline: '1393',
   hotlineLabel: '자살예방상담전화',
