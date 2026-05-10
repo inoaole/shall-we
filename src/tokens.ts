@@ -13,15 +13,27 @@
 export const colors = {
   transparent: 'transparent',
   white: '#FFFFFF',
-  primary: '#24D455',          // shallwe green
+  primary: '#4CAF7D',          // shallwe green — Figma 실제 화면 기준 (design system page는 #24D455로 드리프트)
   ink: '#232323',              // shallwe white (Figma name; actually dark gray)
   black: '#000000',
   gray: '#8A8C8F',             // Y Gray
+  'gray-soft': '#D9D9D9',      // 보더/비활성 칩 (Figma 화면 빈도 높음)
+  'gray-muted': '#444B47',     // 다크 그린-그레이, 다이어리/모달 CTA
   yellow: '#FFE183',           // shallwe yellow
+  'cat-yellow': '#F9F8CF',     // 챌린지 카테고리 헤더 (노랑)
+  'cat-blue': '#CDE0EE',       // 챌린지 카테고리 헤더 (블루)
+  'cat-purple': '#F7DAFF',     // 챌린지 카테고리 헤더 (보라/핑크)
+  'cat-peach': '#FFE6CB',      // 챌린지 카테고리 일러스트 BG (피치)
   gold: '#B38C45',             // Y Gold
   danger: '#E5484D',           // Radix red 9 — error/warning (design.md §9)
   'bg-gray': '#F8F9F7',
-  'bg-green-tint': '#EDF9E1',
+  'bg-app': '#F9FAFB',         // 메인 앱 배경 (Figma 홈 리스트/갤러리)
+  'bg-green-tint': '#EDF7F2',  // 강조 섹션 (Figma 실측)
+  'bg-green-light': '#EFFBE3', // TodayCard 그라디언트 시작
+  'bg-green-card': '#D4EBD4',  // TodayCard 그라디언트 끝
+  'ai-primary': '#00A63E',     // AI 감정 다이어리 메인 (별개 sub-system)
+  'ai-deep': '#016630',        // AI 다이어리 다크 강조
+  'ai-bg': '#F0FDF4',          // AI 다이어리 그라디언트 배경 시작
 } as const;
 
 export type ColorToken = keyof typeof colors;

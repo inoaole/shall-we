@@ -22,16 +22,25 @@ export default function Splash() {
   }, [navigate, state]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-5 relative">
-      <div className="flex flex-col items-center gap-5">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-primary px-5 relative">
+      <div className="flex flex-col items-center gap-6">
         <img
           src="/logo/symbol.png"
           alt=""
           className="w-24 h-24 animate-pulse"
         />
-        <img src="/logo/wordmark.png" alt="Shall We" className="h-7" />
+        <h1
+          className="text-title-24 text-white"
+          style={{
+            WebkitTextStroke: '1.5px white',
+            WebkitTextFillColor: 'transparent',
+            letterSpacing: '0.02em',
+          }}
+        >
+          Shall We
+        </h1>
       </div>
-      <p className="absolute bottom-10 text-body-12 text-gray">ver 0.2.3</p>
+      <p className="absolute bottom-10 text-body-12 text-white/80">ver 0.3.0</p>
     </div>
   );
 }

@@ -1,18 +1,13 @@
 /**
- * ChallengeCert — 챌린지 인증 업로드.
+ * ChallengeCert — 챌린지 인증 업로드 (Figma 40000611:3866).
  *
  * Photo upload (blob URL with cleanup), challenge chip selector
  * (0/1/2+ branching), text, public/private radio, upload.
- *
- * - Photo picker cancel → notify (graceful)
- * - blob URL revoked on unmount (memory leak prevention)
- * - 1 challenge → auto-selected + chips hidden
- * - 2+ challenges → forced selection
  */
 
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Camera, ImageIcon } from 'lucide-react';
+import { Camera } from 'lucide-react';
 import { useApp } from '@/store/AppContext';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/Textarea';
@@ -34,7 +29,6 @@ export default function ChallengeCert() {
   const [text, setText] = useState('');
   const [isPublic, setIsPublic] = useState(true);
 
-  // Cleanup blob URL on unmount (P2 prevention)
   useEffect(() => {
     return () => {
       if (photo?.url) URL.revokeObjectURL(photo.url);
@@ -77,15 +71,15 @@ export default function ChallengeCert() {
   };
 
   return (
-    <div className="min-h-screen pb-10 bg-bg-gray">
+    <div className="min-h-screen pb-10 bg-bg-app">
       <BackHeader title="챌린지 인증" sticky />
 
       <div className="px-5 mt-5 space-y-6">
         {/* Photo */}
-        <section className="space-y-2">
+        <section className="space-y-3">
           <h2 className="text-subtitle-16 text-ink">사진 찍기</h2>
           <div
-            className="aspect-square bg-white rounded-xl overflow-hidden flex items-center justify-center shadow-sm border border-gray/10 cursor-pointer active:scale-[0.99] transition-transform"
+            className="aspect-square bg-white rounded-xl overflow-hidden flex items-center justify-center border border-gray-soft cursor-pointer active:scale-[0.99] transition-transform"
             onClick={() => fileRef.current?.click()}
           >
             {photo ? (
@@ -104,18 +98,17 @@ export default function ChallengeCert() {
             hidden
             onChange={handleFile}
           />
-          <Button
-            variant="secondary"
-            leftIcon={<ImageIcon size={18} />}
+          <button
             onClick={() => fileRef.current?.click()}
+            className="text-body-14 text-primary font-medium active:scale-95 transition-transform"
           >
             갤러리에서 선택
-          </Button>
+          </button>
         </section>
 
-        {/* Challenge selector — chip 가로 wrap */}
+        {/* Challenge selector */}
         {state.challenges.length > 0 && (
-          <section className="space-y-2">
+          <section className="space-y-3">
             <h2 className="text-subtitle-16 text-ink">진행 중인 챌린지</h2>
             {state.challenges.length === 1 ? (
               <p className="text-body-12 text-gray pl-1">
@@ -137,7 +130,7 @@ export default function ChallengeCert() {
         )}
 
         {/* Text */}
-        <section className="space-y-2">
+        <section className="space-y-3">
           <h2 className="text-subtitle-16 text-ink">글 작성</h2>
           <Textarea
             value={text}
@@ -148,7 +141,7 @@ export default function ChallengeCert() {
         </section>
 
         {/* Privacy */}
-        <section className="space-y-2">
+        <section className="space-y-3">
           <h2 className="text-subtitle-16 text-ink">공개 설정</h2>
           <div className="grid grid-cols-2 gap-2">
             <RadioOption

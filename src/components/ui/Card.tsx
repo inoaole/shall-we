@@ -38,17 +38,15 @@ export function TodayCard({ title, durationDays, completedDays, onClick }: Today
   const progressValue = showProgress ? completedDays / durationDays : 0;
 
   return (
-    <button onClick={onClick} className={`${baseCard} w-full text-left p-4`}>
+    <button
+      onClick={onClick}
+      className="w-full text-left p-4 rounded-xl border border-gray/15 shadow-sm bg-gradient-to-br from-bg-green-light to-bg-green-card active:scale-[0.99] transition-transform"
+    >
       <div className="flex items-start gap-3">
         <div className="flex-1 space-y-1">
           <h3 className="text-subtitle-16 text-ink">{title}</h3>
           {durationDays !== undefined && (
-            <p className="text-body-12 text-gray">{durationDays}일 챌린지</p>
-          )}
-          {completedDays !== undefined && completedDays > 0 && (
-            <p className="text-body-14 text-primary mt-2 font-medium">
-              벌써 {completedDays}일 완수!
-            </p>
+            <p className="text-body-12 text-ink/60">{durationDays}일 챌린지</p>
           )}
         </div>
         <img src="/logo/symbol.png" alt="" className="w-10 h-10 shrink-0" />
@@ -56,6 +54,13 @@ export function TodayCard({ title, durationDays, completedDays, onClick }: Today
       {showProgress && (
         <div className="mt-3">
           <ProgressBar value={progressValue} />
+        </div>
+      )}
+      {completedDays !== undefined && completedDays > 0 && (
+        <div className="mt-3 flex justify-end">
+          <span className="px-2.5 py-1 bg-gray-muted text-white text-body-12 rounded-md font-semibold">
+            {completedDays}일 완수
+          </span>
         </div>
       )}
     </button>
@@ -78,31 +83,42 @@ interface FeedCardProps {
 export function FeedCard({ title, body, photoUrl, isPrivate, onClick, layout = 'list' }: FeedCardProps) {
   if (layout === 'grid') {
     return (
-      <button onClick={onClick} className={`${baseCard} text-left w-full p-3`}>
+      <button onClick={onClick} className="text-left w-full bg-white rounded-xl border border-gray/15 shadow-sm overflow-hidden active:scale-[0.99] transition-transform">
         {photoUrl ? (
-          <div className="aspect-square bg-bg-gray rounded-lg mb-2 overflow-hidden">
+          <div className="aspect-square bg-bg-gray overflow-hidden">
             <img src={photoUrl} alt="" className="w-full h-full object-cover" />
           </div>
         ) : (
-          <div className="aspect-square bg-bg-gray rounded-lg mb-2 flex items-center justify-center text-gray/40 text-body-12">
+          <div className="aspect-square bg-bg-gray flex items-center justify-center text-gray/40 text-body-12">
             no image
           </div>
         )}
-        <p className="text-subtitle-16 text-ink truncate">{title}</p>
-        <p className="text-body-12 text-gray mt-0.5 line-clamp-2 leading-snug">{body}</p>
-        {isPrivate && (
-          <span className="text-body-12 text-gray mt-1 inline-block">🔒</span>
-        )}
+        <div className="p-3 bg-bg-gray border-t border-gray-soft">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-subtitle-16 text-ink truncate">{title}</p>
+            {isPrivate && <span className="text-body-12 text-gray shrink-0">🔒</span>}
+          </div>
+          <p className="text-body-12 text-gray mt-0.5 line-clamp-2 leading-snug">{body}</p>
+        </div>
       </button>
     );
   }
   return (
-    <button onClick={onClick} className={`${baseCard} w-full text-left p-4`}>
-      <div className="flex items-start justify-between gap-2 mb-1.5">
-        <p className="text-subtitle-16 text-ink">{title}</p>
-        {isPrivate && <span className="text-body-12 text-gray shrink-0">🔒</span>}
+    <button onClick={onClick} className={`${baseCard} w-full text-left p-3`}>
+      <div className="flex items-start gap-3">
+        <div className="w-[106px] h-[105px] shrink-0 rounded-[10px] bg-gray overflow-hidden">
+          {photoUrl ? (
+            <img src={photoUrl} alt="" className="w-full h-full object-cover" />
+          ) : null}
+        </div>
+        <div className="flex-1 min-w-0 pt-1">
+          <div className="flex items-start justify-between gap-2 mb-1">
+            <p className="text-subtitle-16 text-ink truncate">{title}</p>
+            {isPrivate && <span className="text-body-12 text-gray shrink-0">🔒</span>}
+          </div>
+          <p className="text-body-14 text-ink/75 line-clamp-3 whitespace-pre-line leading-relaxed">{body}</p>
+        </div>
       </div>
-      <p className="text-body-14 text-ink/75 line-clamp-3 whitespace-pre-line leading-relaxed">{body}</p>
     </button>
   );
 }
@@ -132,17 +148,19 @@ export function RecommendCard({
 }: RecommendCardProps) {
   return (
     <button onClick={onClick} className={`${baseCard} text-left w-full p-5 space-y-4`}>
-      {/* Header — ... + N일 pill */}
+      {/* Header — ... + N일 pill (그린 보더) */}
       <div className="flex items-center justify-between">
         <MoreHorizontal size={18} className="text-gray" aria-hidden />
-        <span className="px-2.5 py-0.5 bg-bg-gray text-ink text-body-12 rounded-md font-semibold">
+        <span className="px-2.5 py-0.5 bg-bg-green-tint border border-primary text-primary text-body-12 rounded-md font-semibold">
           {durationDays}일
         </span>
       </div>
 
-      {/* Hero — 옐로 + 카테고리 아이콘 */}
-      <div className="bg-yellow/35 rounded-2xl h-28 flex items-center justify-center">
-        <Icon size={40} strokeWidth={1.75} className="text-ink/70" />
+      {/* Hero — 피치 원형 일러스트 */}
+      <div className="flex items-center justify-center py-2">
+        <div className="w-28 h-28 rounded-full bg-cat-peach flex items-center justify-center">
+          <Icon size={44} strokeWidth={1.75} className="text-ink/70" />
+        </div>
       </div>
 
       {/* Title */}

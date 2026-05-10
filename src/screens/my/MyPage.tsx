@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { Settings as SettingsIcon, ChevronRight, User } from 'lucide-react';
+import { Menu, Settings as SettingsIcon, ChevronRight, Footprints } from 'lucide-react';
 import { useApp } from '@/store/AppContext';
-import { TodayCard } from '@/components/ui/Card';
+import { ProgressBar } from '@/components/ui/ProgressBar';
 import { PostFeed } from '@/components/ui/PostFeed';
 
 export default function MyPage() {
@@ -9,61 +9,54 @@ export default function MyPage() {
   const { state, dispatch } = useApp();
 
   const nickname = state.user.nickname || '닉네임';
-  const completedDaysFor = (id: string) =>
-    state.posts.filter((p) => p.challengeId === id).length;
 
-  // Profile stats
-  const totalCerts = state.posts.length;
-  const activeChallengeCount = state.challenges.length;
+  const walkChallenge =
+    state.challenges.find((c) => c.title.includes('산책')) ?? state.challenges[0];
+  const walkCompleted = walkChallenge
+    ? state.posts.filter((p) => p.challengeId === walkChallenge.id).length
+    : 0;
 
   return (
-    <div className="px-5 pt-4 space-y-5">
-      {/* Profile card — 닉네임 + 통계 */}
-      <section className="bg-white rounded-xl border border-gray/15 shadow-sm p-5">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-full bg-bg-green-tint flex items-center justify-center">
-            <User size={22} className="text-primary" strokeWidth={2} />
-          </div>
+    <div className="min-h-screen bg-bg-app px-5 pt-4 pb-10 space-y-5">
+      {/* 닉네임 헤더 카드 */}
+      <section className="bg-gradient-to-br from-bg-green-light to-bg-green-card rounded-xl border border-gray/15 p-5">
+        <div className="flex items-start gap-3">
+          <img src="/logo/symbol.png" alt="" className="w-12 h-12 shrink-0" />
           <div className="flex-1">
             <h1 className="text-title-20 text-ink">{nickname}님</h1>
-            <p className="text-body-12 text-gray mt-0.5">
+            <p className="text-body-12 text-ink/60 mt-0.5">
               ShallWe와 함께 성장 중
             </p>
           </div>
-        </div>
-
-        {/* Mini stats */}
-        <div className="grid grid-cols-2 gap-3 pt-4 border-t border-gray/10">
-          <div className="text-center">
-            <p className="text-title-20 text-primary">{totalCerts}</p>
-            <p className="text-body-12 text-gray mt-1">총 인증</p>
-          </div>
-          <div className="text-center">
-            <p className="text-title-20 text-primary">{activeChallengeCount}</p>
-            <p className="text-body-12 text-gray mt-1">진행 중 챌린지</p>
-          </div>
+          <button
+            onClick={() => navigate('/settings')}
+            aria-label="메뉴"
+            className="p-1 -mr-1 active:scale-90 transition-transform"
+          >
+            <Menu size={22} className="text-ink" strokeWidth={2} />
+          </button>
         </div>
       </section>
 
-      {/* 오늘의 챌린지 (있을 때만, 모든 챌린지) */}
-      {state.challenges.length > 0 && (
-        <section>
-          <h2 className="text-subtitle-16 text-ink mb-3">오늘의 챌린지</h2>
-          <div className="space-y-3">
-            {state.challenges.map((c) => (
-              <TodayCard
-                key={c.id}
-                title={c.title}
-                durationDays={c.durationDays}
-                completedDays={completedDaysFor(c.id)}
-                onClick={() => navigate('/challenge')}
-              />
-            ))}
+      {/* 산책 진행률 카드 */}
+      {walkChallenge && (
+        <section className="bg-white rounded-xl border border-gray/15 p-4">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-full bg-bg-green-tint flex items-center justify-center">
+              <Footprints size={20} className="text-primary" strokeWidth={2} />
+            </div>
+            <div className="flex-1">
+              <p className="text-subtitle-16 text-ink">{walkChallenge.title}</p>
+              <p className="text-body-12 text-gray mt-0.5">
+                {walkCompleted}일 / {walkChallenge.durationDays}일
+              </p>
+            </div>
           </div>
+          <ProgressBar value={walkCompleted / walkChallenge.durationDays} />
         </section>
       )}
 
-      {/* 설정 — outlined row (다른 카드와 톤 분리) */}
+      {/* 설정 카드 */}
       <button
         onClick={() => navigate('/settings')}
         className="w-full bg-white rounded-xl border border-gray/15 p-4 flex items-center gap-3 active:scale-[0.99] transition-transform"

@@ -1,20 +1,33 @@
 /**
- * MyChallenge — 기존 다이어리 탭 컨텐츠 (진행 카드 + 캘린더 + 오늘 챌린지).
+ * MyChallenge — 챌린지 진행현황 (Figma 40000611:5419).
  *
- * v0.1.4에서 다이어리 탭이 AI 다이어리 작성 흐름으로 전환되면서, 챌린지
- * 진행 현황은 별도 라우트(/challenge)로 분리. 홈에서 "내 챌린지"로 진입.
+ * 상단 그라디언트 카드(완수 N일차) + 이번 달 완수 현황 7x4 그리드 + 오늘 챌린지 카드.
  */
 
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addMonths, eachDayOfInterval, endOfMonth, isSameDay, startOfMonth, subMonths } from 'date-fns';
+import {
+  addMonths,
+  eachDayOfInterval,
+  endOfMonth,
+  isSameDay,
+  startOfMonth,
+  subMonths,
+} from 'date-fns';
 import { useApp } from '@/store/AppContext';
-import { Calendar as CalendarUI, CalendarCell } from '@/components/ui/Calendar';
 import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { BackHeader } from '@/components/layout/BackHeader';
-import { cellState } from '@/utils/date';
+import { cellState, type CellState } from '@/utils/date';
+
+const cellClass: Record<CellState, string> = {
+  'done': 'bg-primary text-white font-semibold',
+  'missed': 'bg-white border border-gray/30 text-ink',
+  'future': 'bg-bg-app text-gray',
+  'today-empty': 'bg-bg-app text-gray',
+  'other-month': 'bg-transparent text-gray/40',
+};
 
 export default function MyChallenge() {
   const navigate = useNavigate();
@@ -39,67 +52,106 @@ export default function MyChallenge() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewMonth, state.posts]);
 
+  // 첫 주 padding (월요일 시작)
+  const firstWeekday = startOfMonth(viewMonth).getDay(); // 0=일
+  const monStartOffset = (firstWeekday + 6) % 7; // 월요일=0
+  const padCells = Array.from({ length: monStartOffset });
+
   const handleCellClick = (date: Date) => {
     const post = state.posts.find((p) => isSameDay(new Date(p.date), date));
     if (post) navigate(`/post/${post.id}`);
   };
 
   return (
-    <div className="min-h-screen bg-bg-gray pb-10">
+    <div className="min-h-screen bg-bg-app pb-10">
       <BackHeader title="내 챌린지" sticky />
       <div className="px-5 pt-4 space-y-5">
         {activeChallenge ? (
           <>
-            {/* Progress card — logo + 챌린지 이름 + 진행 (Figma 40000611:5571) */}
-            <section className="bg-white rounded-xl border border-gray/15 shadow-sm p-6 flex flex-col items-center text-center">
-              <img src="/logo/symbol.png" alt="" className="w-14 h-14 mb-3" />
-              <span className="inline-block px-2.5 py-0.5 bg-bg-green-tint text-primary text-body-12 rounded-full mb-2 font-medium">
-                {activeChallenge.durationDays}일 챌린지
-              </span>
-              <h2 className="text-title-20 text-ink mb-5">{activeChallenge.title}</h2>
-              <p className="text-body-14 mb-3 self-stretch flex justify-between items-baseline">
+            {/* Gradient progress card */}
+            <section className="bg-gradient-to-br from-bg-green-light to-bg-green-card rounded-xl border border-gray/15 p-5">
+              <div className="flex items-start gap-3 mb-4">
+                <img src="/logo/symbol.png" alt="" className="w-12 h-12 shrink-0" />
+                <div className="flex-1">
+                  <h2 className="text-title-20 text-ink">{activeChallenge.title}</h2>
+                  <p className="text-body-12 text-ink/60 mt-0.5">
+                    {activeChallenge.durationDays}일 챌린지
+                  </p>
+                </div>
+                {completedDays > 0 && (
+                  <span className="px-2.5 py-1 bg-gray-muted text-white text-body-12 rounded-md font-semibold whitespace-nowrap">
+                    완수 {completedDays}일차
+                  </span>
+                )}
+              </div>
+              <p className="flex justify-between items-baseline mb-2">
                 <span>
-                  <span className="text-title-20 text-primary font-semibold">{completedDays}일</span>
-                  <span className="text-gray"> / {activeChallenge.durationDays}일</span>
-                </span>
-                <span className="text-body-12 text-gray">
-                  {completedDays > 0 ? `완수 ${completedDays}일차` : '시작 전'}
+                  <span className="text-title-20 text-primary font-semibold">
+                    {completedDays}일
+                  </span>
+                  <span className="text-body-14 text-ink/60">
+                    /{activeChallenge.durationDays}일
+                  </span>
                 </span>
               </p>
-              <div className="w-full">
-                <ProgressBar value={completedDays / activeChallenge.durationDays} />
-              </div>
+              <ProgressBar value={completedDays / activeChallenge.durationDays} />
             </section>
 
-            {/* Calendar */}
-            <section className="bg-white rounded-xl shadow-md p-5">
-              <h3 className="text-subtitle-16 text-ink mb-4">이번 달 완수 현황</h3>
-              <CalendarUI
-                year={viewMonth.getFullYear()}
-                month={viewMonth.getMonth()}
-                cells={cells}
-                renderCell={(c, onClick) => (
-                  <CalendarCell day={c.day} state={c.state} isToday={c.isToday} onClick={onClick} />
-                )}
-                onCellClick={handleCellClick}
-                onPrev={() => setViewMonth(subMonths(viewMonth, 1))}
-                onNext={() => setViewMonth(addMonths(viewMonth, 1))}
-              />
-              <div className="flex flex-wrap gap-3 mt-5 pt-4 border-t border-gray/10 text-body-12 text-gray">
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="w-3 h-3 rounded-md bg-primary" /> 완수
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="w-3 h-3 rounded-md bg-white border-[1.5px] border-gray/25" /> 미완수
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="w-3 h-3 rounded-md bg-gray/10" /> 미래
-                </span>
+            {/* Calendar — 이번 달 완수 현황 */}
+            <section className="bg-white rounded-xl border border-gray/15 p-5">
+              <div className="flex items-center justify-between mb-4">
+                <button
+                  onClick={() => setViewMonth(subMonths(viewMonth, 1))}
+                  className="text-2xl text-ink px-2 leading-none active:scale-90 transition-transform"
+                  aria-label="이전 달"
+                >
+                  ‹
+                </button>
+                <h3 className="text-subtitle-16 text-ink">
+                  이번 달 완수 현황
+                </h3>
+                <button
+                  onClick={() => setViewMonth(addMonths(viewMonth, 1))}
+                  className="text-2xl text-ink px-2 leading-none active:scale-90 transition-transform"
+                  aria-label="다음 달"
+                >
+                  ›
+                </button>
+              </div>
+              <div className="grid grid-cols-7 gap-1.5 text-body-12 text-center text-gray mb-2 font-medium">
+                {['월', '화', '수', '목', '금', '토', '일'].map((d) => (
+                  <div key={d} className="py-1">
+                    {d}
+                  </div>
+                ))}
+              </div>
+              <div className="grid grid-cols-7 gap-1.5 justify-items-center">
+                {padCells.map((_, i) => (
+                  <div key={`pad-${i}`} className="w-10 h-10" />
+                ))}
+                {cells.map((c) => {
+                  const interactive = c.state === 'done';
+                  return (
+                    <button
+                      key={c.date.toISOString()}
+                      onClick={() => handleCellClick(c.date)}
+                      disabled={!interactive}
+                      aria-label={`${c.day}일`}
+                      className={`w-10 h-10 rounded-md flex items-center justify-center text-body-14 transition-all ${
+                        cellClass[c.state]
+                      } ${
+                        c.isToday ? 'ring-[1.5px] ring-primary ring-offset-1' : ''
+                      } ${interactive ? 'active:scale-[0.95]' : 'cursor-default'}`}
+                    >
+                      {c.day}
+                    </button>
+                  );
+                })}
               </div>
             </section>
 
             {/* Today challenge + 인증하기 */}
-            <section className="bg-white rounded-xl shadow-md p-5 space-y-3">
+            <section className="bg-white rounded-xl border border-gray/15 p-5 space-y-3">
               <h3 className="text-subtitle-16 text-ink">오늘 챌린지</h3>
               <p className="text-body-14 text-ink">{activeChallenge.title}</p>
               <Button onClick={() => navigate('/cert/upload')}>인증하기</Button>

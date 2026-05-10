@@ -84,6 +84,7 @@ export function PostFeed({
               key={p.id}
               title={p.challengeTitle}
               body={p.text}
+              photoUrl={p.photoUrl}
               isPrivate={!p.isPublic}
               layout="list"
               onClick={() => navigate(`/post/${p.id}`)}

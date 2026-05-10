@@ -3,7 +3,7 @@
 > '쉬었음 청년'을 위한 AI 감정기록 챌린지 서비스
 > 연세대 UXIM 3팀(레디액션) — React 프로토타입
 
-[![version](https://img.shields.io/badge/version-0.1.0-24D455)]() [![sprints](https://img.shields.io/badge/sprints-S1·S2·S3·S4-24D455)]() [![tests](https://img.shields.io/badge/tests-19_pass-24D455)]() [![deploy](https://img.shields.io/badge/vercel-ready-24D455)]()
+[![version](https://img.shields.io/badge/version-0.3.0-4CAF7D)]() [![sprints](https://img.shields.io/badge/sprints-S1·S2·S3·S4·Figma_Sync-4CAF7D)]() [![tests](https://img.shields.io/badge/tests-19_pass-4CAF7D)]() [![deploy](https://img.shields.io/badge/vercel-ready-4CAF7D)]()
 
 <p>
   <img src="./assets/logo/symbol.png" width="80" alt="ShallWe symbol">

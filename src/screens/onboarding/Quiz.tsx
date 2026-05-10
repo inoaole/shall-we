@@ -88,18 +88,19 @@ export default function Quiz() {
   if (phase === 'phq9') {
     const q = phq9Questions[phq9Idx];
     const value = phq9Map[q.id];
+    const stepNumber = phq9Idx + 1;
     return (
       <div className="min-h-screen flex flex-col bg-bg-gray">
         <BackHeader
           onBack={handlePrev}
-          rightSlot={<StepPagination current={phq9Idx + 1} total={PHQ9_TOTAL} />}
+          rightSlot={<StepPagination current={stepNumber} total={PHQ9_TOTAL} />}
           sticky
         />
-        <div className="px-5 mb-10">
-          <ProgressBar value={(phq9Idx + 1) / PHQ9_TOTAL} />
+        <div className="px-5 pt-2 pb-8">
+          <ProgressBar value={stepNumber / PHQ9_TOTAL} />
         </div>
         <div className="px-5 flex-1 flex flex-col">
-          <h2 className="text-title-20 text-ink mb-8 whitespace-pre-line leading-relaxed">
+          <h2 className="text-title-20 text-ink mb-10 whitespace-pre-line leading-relaxed">
             {q.question}
           </h2>
           <div className="space-y-2.5">
@@ -130,7 +131,7 @@ export default function Quiz() {
       <BackHeader onBack={handlePrev} title="챌린지 선호 조사" sticky />
       <div className="px-5 pt-2 pb-8 flex-1 flex flex-col">
         <p className="text-body-14 text-gray mb-6">
-          5가지 축에서 끌리는 쪽을 골라줘.
+          끌리는 쪽을 골라주세요.
         </p>
         <div className="space-y-4">
           {preferenceAxes.map((axis) => (
