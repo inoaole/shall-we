@@ -27,10 +27,10 @@ export function PoleChoice({ left, right, value, onChange }: Props) {
             key={opt.value}
             onClick={() => onChange(opt.value)}
             aria-pressed={selected}
-            className={`h-11 rounded-md border text-subtitle-16 transition-colors ${
+            className={`h-12 rounded-md border-[1.5px] text-subtitle-16 transition-all active:scale-[0.97] ${
               selected
-                ? 'bg-bg-green-tint border-primary border-[1.5px] text-primary'
-                : 'bg-white border-gray/30 text-ink'
+                ? 'bg-bg-green-tint border-primary text-primary'
+                : 'bg-white border-gray/25 text-ink'
             }`}
           >
             {opt.label}

@@ -10,22 +10,22 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClass: Record<Variant, string> = {
-  primary:   'bg-primary text-white disabled:bg-gray/40 disabled:text-white',
-  secondary: 'bg-transparent text-primary border border-primary disabled:text-gray disabled:border-gray',
-  social:    'bg-white text-ink border border-gray/30',
+  primary:   'bg-primary text-white shadow-sm hover:brightness-105 disabled:bg-gray/30 disabled:text-white disabled:shadow-none',
+  secondary: 'bg-white text-primary border-[1.5px] border-primary disabled:text-gray disabled:border-gray/30 disabled:bg-bg-gray',
+  social:    'bg-white text-ink border-[1.5px] border-gray/25 shadow-sm hover:bg-bg-gray',
 };
 
 const sizeClass: Record<Size, string> = {
-  'full':       'w-full h-13 rounded-md text-subtitle-16',
-  'pair-prev':  'flex-[1] h-13 rounded-md text-subtitle-16',
-  'pair-next':  'flex-[2] h-13 rounded-md text-subtitle-16',
+  'full':       'w-full h-13 rounded-lg text-subtitle-16',
+  'pair-prev':  'flex-[1] h-13 rounded-lg text-subtitle-16',
+  'pair-next':  'flex-[2] h-13 rounded-lg text-subtitle-16',
 };
 
 export const Button = forwardRef<HTMLButtonElement, Props>(
   ({ variant = 'primary', size = 'full', leftIcon, className = '', children, ...rest }, ref) => (
     <button
       ref={ref}
-      className={`inline-flex items-center justify-center gap-2 transition-colors ${variantClass[variant]} ${sizeClass[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 transition-all duration-150 active:scale-[0.97] disabled:active:scale-100 ${variantClass[variant]} ${sizeClass[size]} ${className}`}
       {...rest}
     >
       {leftIcon}

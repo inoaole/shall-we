@@ -8,12 +8,14 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = forwardRef<HTMLInputElement, Props>(
   ({ helper, error, label, className = '', ...rest }, ref) => (
-    <div className="space-y-1">
-      {label && <label className="block text-body-14 text-ink">{label}</label>}
+    <div className="space-y-1.5">
+      {label && <label className="block text-body-14 text-ink font-medium">{label}</label>}
       <input
         ref={ref}
-        className={`w-full h-12 px-4 rounded-md bg-white border text-body-14 text-ink placeholder:text-gray focus:outline-none focus:border-primary ${
-          error ? 'border-red-500' : 'border-gray/30'
+        className={`w-full h-12 px-4 rounded-md bg-white border-[1.5px] text-body-14 text-ink placeholder:text-gray/70 focus:outline-none transition-colors ${
+          error
+            ? 'border-red-500 focus:border-red-500'
+            : 'border-gray/25 focus:border-primary'
         } ${className}`}
         {...rest}
       />

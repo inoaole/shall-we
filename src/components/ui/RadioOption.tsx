@@ -14,10 +14,10 @@ export function RadioOption({ label, selected, onClick, className = '' }: Props)
       onClick={onClick}
       role="radio"
       aria-checked={selected}
-      className={`w-full h-12 px-5 rounded-md border text-left text-body-14 transition-colors ${
+      className={`w-full h-12 px-5 rounded-md border-[1.5px] text-left text-body-14 transition-all active:scale-[0.99] ${
         selected
-          ? 'bg-bg-green-tint border-primary border-[1.5px] text-primary'
-          : 'bg-white border-gray/30 text-ink'
+          ? 'bg-bg-green-tint border-primary text-primary font-medium'
+          : 'bg-white border-gray/25 text-ink'
       } ${className}`}
     >
       {label}
