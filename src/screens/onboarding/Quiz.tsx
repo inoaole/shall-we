@@ -1,13 +1,12 @@
 /**
- * Quiz — PHQ-9 9문항 + 선호조사 5축 = 14 step 단일 컴포넌트 (D1+D2).
+ * Quiz — PHQ-9 9문항 (자동 진행) + 챌린지 선호조사 5축 (단일 화면).
  *
- * - 단일 라우트 `/check/quiz` + 내부 step state (URL param X)
- * - 데이터 주도 (data/phq9-questions.ts + data/preference-axes.ts)
- * - 마지막 step에서 SET_PHQ9 + SET_PREFERENCE dispatch + replace navigate
- * - 답 안 한 채로 다음 비활성, 이전 시 답 유지
+ * - PHQ-9: 1문항씩, 선택 250ms 후 자동 진행. 하단 CTA 없음 (헤더 ← 만).
+ * - 선호조사: 5축을 한 화면에 노출, 모두 답하면 "결과 보기" 활성.
+ * - 단일 라우트 `/check/quiz` + 내부 phase state.
  */
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { phq9Questions } from '@/data/phq9-questions';
 import { preferenceAxes } from '@/data/preference-axes';
@@ -20,114 +19,149 @@ import { RadioOption } from '@/components/ui/RadioOption';
 import { PoleChoice } from '@/components/ui/PoleChoice';
 import { BackHeader } from '@/components/layout/BackHeader';
 
-const STEPS = [...phq9Questions, ...preferenceAxes]; // 9 + 5 = 14
-const TOTAL = STEPS.length;
+const PHQ9_TOTAL = phq9Questions.length;
+const ADVANCE_MS = 250;
 
-type AnswerMap = Record<string, number | string>;
+type Phase = 'phq9' | 'preference';
 
 export default function Quiz() {
   const navigate = useNavigate();
   const { dispatch } = useApp();
-  const [stepIdx, setStepIdx] = useState(0);
-  const [answers, setAnswers] = useState<AnswerMap>({});
+  const [phase, setPhase] = useState<Phase>('phq9');
+  const [phq9Idx, setPhq9Idx] = useState(0);
+  const [phq9Map, setPhq9Map] = useState<Record<string, number>>({});
+  const [prefMap, setPrefMap] = useState<Record<string, string>>({});
+  const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const step = STEPS[stepIdx];
-  const value = answers[step.id];
-  const canNext = value !== undefined;
-  const isLast = stepIdx === TOTAL - 1;
+  useEffect(
+    () => () => {
+      if (advanceTimer.current) clearTimeout(advanceTimer.current);
+    },
+    [],
+  );
 
-  const handleAnswer = (v: number | string) => {
-    setAnswers({ ...answers, [step.id]: v });
+  const handlePhq9Answer = (v: number) => {
+    const q = phq9Questions[phq9Idx];
+    setPhq9Map((m) => ({ ...m, [q.id]: v }));
+    if (advanceTimer.current) clearTimeout(advanceTimer.current);
+    advanceTimer.current = setTimeout(() => {
+      if (phq9Idx === PHQ9_TOTAL - 1) {
+        setPhase('preference');
+      } else {
+        setPhq9Idx((i) => i + 1);
+      }
+    }, ADVANCE_MS);
+  };
+
+  const handlePrefAnswer = (axisId: string, v: string) => {
+    setPrefMap((m) => ({ ...m, [axisId]: v }));
   };
 
   const handlePrev = () => {
-    if (stepIdx === 0) {
+    if (advanceTimer.current) clearTimeout(advanceTimer.current);
+    if (phase === 'preference') {
+      setPhase('phq9');
+      return;
+    }
+    if (phq9Idx === 0) {
       navigate(-1);
     } else {
-      setStepIdx(stepIdx - 1);
+      setPhq9Idx((i) => i - 1);
     }
   };
 
-  const handleNext = () => {
-    if (!canNext) return;
-
-    if (isLast) {
-      // 14 step 완료 → dispatch + analyzing
-      const phq9Answers = phq9Questions.map((q) => Number(answers[q.id]));
-      const s = score(phq9Answers);
-      dispatch({
-        type: 'SET_PHQ9',
-        payload: { answers: phq9Answers, score: s, level: level(s) },
-      });
-      const pref: Record<string, string> = {};
-      preferenceAxes.forEach((a) => {
-        pref[a.category!] = String(answers[a.id]);
-      });
-      dispatch({ type: 'SET_PREFERENCE', payload: pref });
-
-      navigate('/check/analyzing', { replace: true });
-    } else {
-      setStepIdx(stepIdx + 1);
-    }
+  const handleSubmit = () => {
+    const answers = phq9Questions.map((q) => Number(phq9Map[q.id]));
+    const s = score(answers);
+    dispatch({
+      type: 'SET_PHQ9',
+      payload: { answers, score: s, level: level(s) },
+    });
+    const pref: Record<string, string> = {};
+    preferenceAxes.forEach((a) => {
+      pref[a.category!] = String(prefMap[a.id]);
+    });
+    dispatch({ type: 'SET_PREFERENCE', payload: pref });
+    navigate('/check/analyzing', { replace: true });
   };
 
-  // Layout: PHQ-9 step과 preference step이 시각적으로 다름
-  const isPreference = step.type === 'preference';
-  // Phase transition label (선호조사 첫 step에만 노출)
-  const sectionLabel =
-    isPreference && stepIdx === phq9Questions.length ? '챌린지 선호 조사' : null;
-
-  return (
-    <div className="min-h-screen flex flex-col bg-bg-gray">
-      <BackHeader
-        onBack={handlePrev}
-        rightSlot={<StepPagination current={stepIdx + 1} total={TOTAL} />}
-      />
-
-      <div className="px-5 mb-10">
-        <ProgressBar value={(stepIdx + 1) / TOTAL} />
-      </div>
-
-      <div className="px-5 flex-1 flex flex-col">
-        {sectionLabel && (
-          <p className="text-body-12 text-primary mb-3 font-semibold">{sectionLabel}</p>
-        )}
-        {isPreference ? (
-          <h2 className="text-title-24 text-ink mb-10 text-center">{step.question}</h2>
-        ) : (
+  if (phase === 'phq9') {
+    const q = phq9Questions[phq9Idx];
+    const value = phq9Map[q.id];
+    return (
+      <div className="min-h-screen flex flex-col bg-bg-gray">
+        <BackHeader
+          onBack={handlePrev}
+          rightSlot={<StepPagination current={phq9Idx + 1} total={PHQ9_TOTAL} />}
+        />
+        <div className="px-5 mb-10">
+          <ProgressBar value={(phq9Idx + 1) / PHQ9_TOTAL} />
+        </div>
+        <div className="px-5 flex-1 flex flex-col">
           <h2 className="text-title-20 text-ink mb-8 whitespace-pre-line leading-relaxed">
-            {step.question}
+            {q.question}
           </h2>
-        )}
-
-        <div className={isPreference ? '' : 'space-y-2.5'}>
-          {isPreference ? (
-            <PoleChoice
-              left={{ label: String(step.options[0].label), value: String(step.options[0].value) }}
-              right={{ label: String(step.options[1].label), value: String(step.options[1].value) }}
-              value={value as string | undefined}
-              onChange={handleAnswer}
-            />
-          ) : (
-            step.options.map((opt) => (
+          <div className="space-y-2.5">
+            {q.options.map((opt) => (
               <RadioOption
                 key={String(opt.value)}
                 label={opt.label}
                 selected={value === opt.value}
-                onClick={() => handleAnswer(opt.value)}
+                onClick={() => handlePhq9Answer(Number(opt.value))}
               />
-            ))
-          )}
+            ))}
+          </div>
+          <div className="flex-1" />
+          <div className="flex gap-2 pt-6 pb-8">
+            <Button variant="secondary" size="pair-prev" onClick={handlePrev}>
+              이전
+            </Button>
+            <div className="flex-[2]" />
+          </div>
         </div>
+      </div>
+    );
+  }
 
+  const allAnswered = preferenceAxes.every((a) => prefMap[a.id] !== undefined);
+  return (
+    <div className="min-h-screen flex flex-col bg-bg-gray">
+      <BackHeader onBack={handlePrev} title="챌린지 선호 조사" />
+      <div className="px-5 pt-2 pb-8 flex-1 flex flex-col">
+        <p className="text-body-14 text-gray mb-6">
+          5가지 축에서 끌리는 쪽을 골라줘.
+        </p>
+        <div className="space-y-4">
+          {preferenceAxes.map((axis) => (
+            <div
+              key={axis.id}
+              className="bg-white rounded-xl border border-gray/15 p-5"
+            >
+              <p className="text-body-12 text-gray mb-3 font-medium">
+                {axis.category}
+              </p>
+              <PoleChoice
+                left={{
+                  label: String(axis.options[0].label),
+                  value: String(axis.options[0].value),
+                }}
+                right={{
+                  label: String(axis.options[1].label),
+                  value: String(axis.options[1].value),
+                }}
+                value={prefMap[axis.id]}
+                onChange={(v) => handlePrefAnswer(axis.id, v)}
+              />
+            </div>
+          ))}
+        </div>
         <div className="flex-1" />
-
-        <div className="flex gap-2 pb-8 pt-6">
+        <div className="flex gap-2 pt-8">
           <Button variant="secondary" size="pair-prev" onClick={handlePrev}>
             이전
           </Button>
-          <Button size="pair-next" disabled={!canNext} onClick={handleNext}>
-            {isLast ? '결과 보기' : '다음'}
+          <Button size="pair-next" disabled={!allAnswered} onClick={handleSubmit}>
+            결과 보기
           </Button>
         </div>
       </div>

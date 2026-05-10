@@ -1,15 +1,12 @@
 /**
- * Quiz integration test (D-S2.2 from eng review).
+ * Quiz integration test.
  *
- * Verifies the 14-step Quiz behavior end-to-end:
- * - Initial render: question 1/14 visible, "다음" disabled
- * - After answering: "다음" enabled
- * - 이전 button preserves prior answer
- * - Last step dispatches and navigates
+ * - PHQ-9 (9 step): 선택 시 250ms 후 자동 진행. 하단 CTA 없음.
+ * - 선호조사 (1 화면): 5축 모두 노출, 모두 답해야 "결과 보기" 활성.
  */
 
-import { describe, it, expect } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { act, render, screen, fireEvent, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { AppProvider } from '@/store/AppContext';
 import Quiz from '@/screens/onboarding/Quiz';
@@ -23,55 +20,85 @@ function renderQuiz() {
           <Route path="/check/analyzing" element={<div>analyzing</div>} />
         </Routes>
       </MemoryRouter>
-    </AppProvider>
+    </AppProvider>,
   );
 }
 
+function flushAdvance() {
+  act(() => {
+    vi.advanceTimersByTime(260);
+  });
+}
+
 describe('Quiz', () => {
-  it('첫 step에서 다음 버튼 비활성', () => {
-    renderQuiz();
-    expect(screen.getByText(/질문 1\/14/)).toBeInTheDocument();
-    const nextBtn = screen.getByRole('button', { name: '다음' });
-    expect(nextBtn).toBeDisabled();
+  beforeEach(() => {
+    vi.useFakeTimers();
   });
 
-  it('답 선택하면 다음 버튼 활성화', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('PHQ-9 첫 step: "다음" 없음, "이전" 있음', () => {
+    renderQuiz();
+    expect(screen.getByText(/질문 1\/9/)).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '다음' })).toBeNull();
+    expect(screen.getByRole('button', { name: '이전' })).toBeInTheDocument();
+  });
+
+  it('PHQ-9 선택 시 250ms 후 자동 진행', () => {
     renderQuiz();
     fireEvent.click(screen.getByRole('radio', { name: '며칠 그랬다' }));
-    expect(screen.getByRole('button', { name: '다음' })).not.toBeDisabled();
+    flushAdvance();
+    expect(screen.getByText(/질문 2\/9/)).toBeInTheDocument();
   });
 
-  it('다음 → 이전 시 직전 답이 유지됨', () => {
+  it('PHQ-9 9개 답하면 선호조사 화면으로 전환', () => {
     renderQuiz();
-    // step 1: "자주 그랬다" 선택
-    fireEvent.click(screen.getByRole('radio', { name: '자주 그랬다' }));
-    fireEvent.click(screen.getByRole('button', { name: '다음' }));
-    // step 2 노출
-    expect(screen.getByText(/질문 2\/14/)).toBeInTheDocument();
-    // 이전 클릭
-    fireEvent.click(screen.getByRole('button', { name: '이전' }));
-    // step 1으로 복귀, "자주 그랬다"가 selected 상태
-    expect(screen.getByText(/질문 1\/14/)).toBeInTheDocument();
-    const selected = screen.getByRole('radio', { name: '자주 그랬다' });
-    expect(selected).toHaveAttribute('aria-checked', 'true');
-  });
-
-  it('14 step 모두 답하면 마지막에 "결과 보기" 버튼 노출', () => {
-    renderQuiz();
-    // 9 PHQ-9 step + 5 preference step
     for (let i = 0; i < 9; i++) {
       fireEvent.click(screen.getByRole('radio', { name: '며칠 그랬다' }));
-      fireEvent.click(screen.getByRole('button', { name: /다음|결과 보기/ }));
+      flushAdvance();
     }
-    // step 10~14 (preference): 양극 2개 중 하나 선택 (PoleChoice — role="radio")
-    for (let i = 10; i <= 14; i++) {
-      const radios = screen.getAllByRole('radio');
-      // 첫 번째 옵션 (left pole) 클릭
-      if (radios[0]) fireEvent.click(radios[0]);
-      const next = screen.getByRole('button', { name: /다음|결과 보기/ });
-      if (i < 14) fireEvent.click(next);
+    expect(screen.getByText('챌린지 선호 조사')).toBeInTheDocument();
+    // 5축 카테고리 라벨이 모두 보여야 함
+    ['활동', '관계', '방식', '취미', '시간'].forEach((cat) => {
+      expect(screen.getByText(cat)).toBeInTheDocument();
+    });
+  });
+
+  it('선호조사: 5개 모두 답해야 "결과 보기" 활성', () => {
+    renderQuiz();
+    // PHQ-9 9개 통과
+    for (let i = 0; i < 9; i++) {
+      fireEvent.click(screen.getByRole('radio', { name: '며칠 그랬다' }));
+      flushAdvance();
     }
-    // 14 step에서 "결과 보기" 버튼이 보여야 함
-    expect(screen.getByRole('button', { name: '결과 보기' })).toBeInTheDocument();
+    // 선호 화면
+    const submit = screen.getByRole('button', { name: '결과 보기' });
+    expect(submit).toBeDisabled();
+
+    // 5축 left pole 선택 (각 카드의 첫 라디오)
+    ['활동', '관계', '방식', '취미', '시간'].forEach((cat) => {
+      const card = screen.getByText(cat).closest('div') as HTMLElement;
+      const firstRadio = within(card).getAllByRole('radio')[0];
+      fireEvent.click(firstRadio);
+    });
+
+    expect(screen.getByRole('button', { name: '결과 보기' })).not.toBeDisabled();
+  });
+
+  it('전체 완료 시 analyzing으로 이동', () => {
+    renderQuiz();
+    for (let i = 0; i < 9; i++) {
+      fireEvent.click(screen.getByRole('radio', { name: '며칠 그랬다' }));
+      flushAdvance();
+    }
+    ['활동', '관계', '방식', '취미', '시간'].forEach((cat) => {
+      const card = screen.getByText(cat).closest('div') as HTMLElement;
+      const firstRadio = within(card).getAllByRole('radio')[0];
+      fireEvent.click(firstRadio);
+    });
+    fireEvent.click(screen.getByRole('button', { name: '결과 보기' }));
+    expect(screen.getByText('analyzing')).toBeInTheDocument();
   });
 });
