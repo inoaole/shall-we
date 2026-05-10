@@ -19,14 +19,15 @@ interface Props {
  */
 export function PoleChoice({ left, right, value, onChange }: Props) {
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div role="radiogroup" className="grid grid-cols-2 gap-2">
       {[left, right].map((opt) => {
         const selected = value === opt.value;
         return (
           <button
             key={opt.value}
             onClick={() => onChange(opt.value)}
-            aria-pressed={selected}
+            role="radio"
+            aria-checked={selected}
             className={`h-12 rounded-md border-[1.5px] text-subtitle-16 transition-all active:scale-[0.97] ${
               selected
                 ? 'bg-bg-green-tint border-primary text-primary'

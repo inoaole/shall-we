@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/Textarea';
 import { Chip } from '@/components/ui/Chip';
 import { RadioOption } from '@/components/ui/RadioOption';
+import { BackHeader } from '@/components/layout/BackHeader';
 import { uuid } from '@/utils/id';
 import { notify } from '@/utils/notify';
 
@@ -77,16 +78,7 @@ export default function ChallengeCert() {
 
   return (
     <div className="min-h-screen pb-10 bg-bg-gray">
-      <header className="px-5 pt-4 pb-3 flex items-center bg-white border-b border-gray/10 sticky top-0 z-10">
-        <button
-          onClick={() => navigate(-1)}
-          className="text-2xl text-ink leading-none -ml-1 px-1 active:scale-90 transition-transform"
-          aria-label="뒤로가기"
-        >
-          ←
-        </button>
-        <h1 className="ml-2 text-title-20 text-ink">챌린지 인증</h1>
-      </header>
+      <BackHeader title="챌린지 인증" sticky />
 
       <div className="px-5 mt-5 space-y-6">
         {/* Photo */}

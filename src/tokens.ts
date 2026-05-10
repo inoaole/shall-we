@@ -19,6 +19,7 @@ export const colors = {
   gray: '#8A8C8F',             // Y Gray
   yellow: '#FFE183',           // shallwe yellow
   gold: '#B38C45',             // Y Gold
+  danger: '#E5484D',           // Radix red 9 — error/warning (design.md §9)
   'bg-gray': '#F8F9F7',
   'bg-green-tint': '#EDF9E1',
 } as const;

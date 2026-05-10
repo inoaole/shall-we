@@ -10,6 +10,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/store/AppContext';
 import { RecommendCard, AddCard } from '@/components/ui/Card';
+import { BackHeader } from '@/components/layout/BackHeader';
 import { uuid } from '@/utils/id';
 import { notify } from '@/utils/notify';
 import recommendations from '@/mocks/recommendations.json';
@@ -43,16 +44,7 @@ export default function Recommend() {
 
   return (
     <div className="min-h-screen pb-10 bg-bg-gray">
-      <header className="px-5 pt-4 pb-3 flex items-center">
-        <button
-          onClick={() => navigate(-1)}
-          className="text-2xl text-ink leading-none -ml-1 px-1 active:scale-90 transition-transform"
-          aria-label="뒤로가기"
-        >
-          ←
-        </button>
-        <h1 className="ml-2 text-title-20 text-ink">어떤 챌린지를 해볼까요?</h1>
-      </header>
+      <BackHeader title="어떤 챌린지를 해볼까요?" />
 
       <div className="mt-4">
         <div className="overflow-hidden" ref={emblaRef}>

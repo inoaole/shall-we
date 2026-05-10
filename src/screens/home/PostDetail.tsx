@@ -1,11 +1,11 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { useApp } from '@/store/AppContext';
 import { format } from 'date-fns';
 import { Lock, Globe, ImageOff } from 'lucide-react';
+import { BackHeader } from '@/components/layout/BackHeader';
 
 export default function PostDetail() {
-  const navigate = useNavigate();
   const { id } = useParams();
   const { state } = useApp();
   const [imgError, setImgError] = useState(false);
@@ -16,15 +16,7 @@ export default function PostDetail() {
   if (!post) {
     return (
       <div className="min-h-screen flex flex-col bg-bg-gray">
-        <header className="px-5 pt-4 pb-3 flex items-center">
-          <button
-            onClick={() => navigate(-1)}
-            className="text-2xl text-ink leading-none -ml-1 px-1"
-            aria-label="뒤로가기"
-          >
-            ←
-          </button>
-        </header>
+        <BackHeader />
         <div className="flex-1 flex items-center justify-center">
           <p className="text-body-14 text-gray">게시글을 찾을 수 없어요</p>
         </div>
@@ -37,16 +29,7 @@ export default function PostDetail() {
 
   return (
     <div className="min-h-screen bg-bg-gray pb-10">
-      <header className="px-5 pt-4 pb-3 flex items-center">
-        <button
-          onClick={() => navigate(-1)}
-          className="text-2xl text-ink leading-none -ml-1 px-1 active:scale-90 transition-transform"
-          aria-label="뒤로가기"
-        >
-          ←
-        </button>
-        <h1 className="ml-2 text-title-20 text-ink">챌린지 인증</h1>
-      </header>
+      <BackHeader title="챌린지 인증" />
 
       <div className="px-5 space-y-4">
         <div className="aspect-square bg-white rounded-xl overflow-hidden flex items-center justify-center">

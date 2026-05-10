@@ -23,13 +23,22 @@ const stateClass: Record<CellState, string> = {
   'other-month':  'bg-transparent text-gray/40',
 };
 
+const stateLabelKo: Record<CellState, string> = {
+  'done':         '완수',
+  'missed':       '미완수',
+  'future':       '미래',
+  'today-empty':  '오늘 (미완수)',
+  'other-month':  '다른 달',
+};
+
 export function CalendarCell({ day, state, isToday, onClick }: CellProps) {
   const interactive = state === 'done';
+  const todaySuffix = isToday ? ', 오늘' : '';
   return (
     <button
       onClick={onClick}
       disabled={!interactive}
-      aria-label={`${day}일 ${state}`}
+      aria-label={`${day}일 ${stateLabelKo[state]}${todaySuffix}`}
       className={`w-10 h-10 rounded-md flex items-center justify-center text-body-14 transition-all ${
         stateClass[state]
       } ${isToday ? 'ring-[1.5px] ring-primary ring-offset-1' : ''} ${

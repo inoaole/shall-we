@@ -18,6 +18,7 @@ import { ProgressBar } from '@/components/ui/ProgressBar';
 import { StepPagination } from '@/components/ui/StepPagination';
 import { RadioOption } from '@/components/ui/RadioOption';
 import { PoleChoice } from '@/components/ui/PoleChoice';
+import { BackHeader } from '@/components/layout/BackHeader';
 
 const STEPS = [...phq9Questions, ...preferenceAxes]; // 9 + 5 = 14
 const TOTAL = STEPS.length;
@@ -78,17 +79,10 @@ export default function Quiz() {
 
   return (
     <div className="min-h-screen flex flex-col bg-bg-gray">
-      <header className="px-5 pt-4 pb-3 flex items-center justify-between">
-        <button
-          onClick={handlePrev}
-          className="text-2xl text-ink leading-none -ml-1 px-1 active:scale-90 transition-transform"
-          aria-label="뒤로가기"
-        >
-          ←
-        </button>
-        <StepPagination current={stepIdx + 1} total={TOTAL} />
-        <span className="w-6" />
-      </header>
+      <BackHeader
+        onBack={handlePrev}
+        rightSlot={<StepPagination current={stepIdx + 1} total={TOTAL} />}
+      />
 
       <div className="px-5 mb-10">
         <ProgressBar value={(stepIdx + 1) / TOTAL} />

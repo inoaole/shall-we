@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { PeriodPill } from '@/components/ui/PeriodPill';
 import { ProgressBar } from '@/components/ui/ProgressBar';
+import { BackHeader } from '@/components/layout/BackHeader';
 import { uuid } from '@/utils/id';
 import { notify } from '@/utils/notify';
 import { Sparkles } from 'lucide-react';
@@ -77,20 +78,9 @@ export default function Steps() {
     <div className="min-h-screen flex flex-col bg-bg-gray">
       {step < 5 && (
         <>
-          <header className="px-5 pt-4 pb-3 flex items-center">
-            <button
-              onClick={handlePrev}
-              className="text-2xl text-ink leading-none -ml-1 px-1 active:scale-90 transition-transform"
-              aria-label="뒤로가기"
-            >
-              ←
-            </button>
-            <h1 className="ml-2 text-title-20 text-ink">챌린지 만들기</h1>
-          </header>
+          <BackHeader title="챌린지 만들기" onBack={handlePrev} />
           <div className="px-5 mb-8">
-            <div className="bg-white rounded-full p-1 shadow-sm">
-              <ProgressBar value={step / TOTAL} className="h-2" />
-            </div>
+            <ProgressBar value={step / TOTAL} />
           </div>
         </>
       )}
