@@ -114,9 +114,21 @@ export default function DiaryTab() {
                 key={d.id}
                 className="bg-white rounded-xl border border-gray/15 p-4"
               >
-                <p className="text-body-12 text-gray mb-1">
-                  {format(new Date(d.date), 'yyyy.MM.dd')} · {moodLabel[d.mood]}
-                </p>
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span
+                    className={`inline-block w-2 h-2 rounded-full ${
+                      d.mood === 'positive'
+                        ? 'bg-primary'
+                        : d.mood === 'negative'
+                        ? 'bg-yellow'
+                        : 'bg-gray/40'
+                    }`}
+                    aria-hidden
+                  />
+                  <span className="text-body-12 text-gray">
+                    {format(new Date(d.date), 'yyyy.MM.dd')} · {moodLabel[d.mood]}
+                  </span>
+                </div>
                 <p className="text-body-14 text-ink line-clamp-2 whitespace-pre-line">
                   {d.answers.q1}
                 </p>

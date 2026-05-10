@@ -78,7 +78,7 @@ export default function Steps() {
     <div className="min-h-screen flex flex-col bg-bg-gray">
       {step < 5 && (
         <>
-          <BackHeader title="챌린지 만들기" onBack={handlePrev} />
+          <BackHeader title="챌린지 만들기" onBack={handlePrev} sticky />
           <div className="px-5 mb-8">
             <ProgressBar value={step / TOTAL} />
           </div>

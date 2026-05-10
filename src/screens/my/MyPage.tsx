@@ -55,7 +55,7 @@ export default function MyPage() {
             title={activeChallenge.title}
             durationDays={activeChallenge.durationDays}
             completedDays={completedDays}
-            onClick={() => navigate('/diary')}
+            onClick={() => navigate('/challenge')}
           />
         </section>
       )}

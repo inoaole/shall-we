@@ -47,7 +47,7 @@ export function RecommendDialog({ rec, onConfirm, onCancel }: Props) {
 
       {/* Mission pill */}
       <div className="bg-bg-gray rounded-xl px-4 py-3 mb-5">
-        <p className="text-body-14 text-ink text-center">
+        <p className="text-body-14 text-ink">
           미션 : {rec.mission}
         </p>
       </div>

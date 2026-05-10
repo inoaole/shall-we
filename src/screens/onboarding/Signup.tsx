@@ -56,7 +56,7 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen pb-10 bg-bg-gray">
-      <BackHeader />
+      <BackHeader sticky />
 
       <h1 className="text-title-24 text-ink mt-4 mb-8 px-5">
         무기력 검사 전<br />회원가입을 진행해주세요!

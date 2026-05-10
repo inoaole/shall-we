@@ -53,7 +53,7 @@ export default function Recommend() {
 
   return (
     <div className="min-h-screen pb-10 bg-bg-gray">
-      <BackHeader title="어떤 챌린지를 해볼까요?" />
+      <BackHeader title="어떤 챌린지를 해볼까요?" sticky />
 
       <div className="mt-4">
         <div className="overflow-hidden" ref={emblaRef}>
