@@ -44,6 +44,18 @@ export type Post = {
 
 export type FeedView = 'list' | 'grid';
 
+export type Mood = 'positive' | 'neutral' | 'negative';
+
+export type DiaryEntry = {
+  id: string;
+  date: string; // ISO yyyy-mm-dd
+  answers: { q1: string; q2: string; q3: string };
+  mood: Mood;
+  aiFeedback: string;
+  recommendedChallenge: string;
+  helpful: boolean | null; // 도움됨 / 공감안됨 / 미응답
+};
+
 export type State = {
   user: { nickname: string | null; email: string | null };
   phq9: { answers: number[]; score: number; level: Level } | null;
@@ -51,6 +63,7 @@ export type State = {
   challenges: Challenge[];
   posts: Post[]; // 본인 게시글 (공개 + 비공개)
   feed: Post[]; // 모두의 챌린지 (seed + 본인 공개 posts)
+  diaries: DiaryEntry[];
   prefs: { feedView: FeedView };
 };
 
@@ -60,6 +73,8 @@ export type Action =
   | { type: 'SET_PREFERENCE'; payload: Record<string, string> }
   | { type: 'ADD_CHALLENGE'; payload: Challenge }
   | { type: 'CERTIFY'; payload: Post }
+  | { type: 'ADD_DIARY'; payload: DiaryEntry }
+  | { type: 'RATE_DIARY'; payload: { id: string; helpful: boolean } }
   | { type: 'TOGGLE_FEED_VIEW' }
   | { type: 'HYDRATE'; payload: State }
   | { type: 'RESET' };
@@ -71,6 +86,7 @@ export const initialState: State = {
   challenges: [],
   posts: myPostsSeed as Post[],
   feed: feedSeed as Post[],
+  diaries: [],
   prefs: { feedView: 'list' },
 };
 
@@ -91,6 +107,15 @@ function reducer(state: State, action: Action): State {
         : state.feed;
       return { ...state, posts: newPosts, feed: newFeed };
     }
+    case 'ADD_DIARY':
+      return { ...state, diaries: [action.payload, ...state.diaries] };
+    case 'RATE_DIARY':
+      return {
+        ...state,
+        diaries: state.diaries.map((d) =>
+          d.id === action.payload.id ? { ...d, helpful: action.payload.helpful } : d,
+        ),
+      };
     case 'TOGGLE_FEED_VIEW':
       return {
         ...state,

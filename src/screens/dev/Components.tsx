@@ -18,7 +18,7 @@ import { PoleChoice } from '@/components/ui/PoleChoice';
 import { Chip } from '@/components/ui/Chip';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { StepPagination } from '@/components/ui/StepPagination';
-import { Calendar, type CellState } from '@/components/ui/Calendar';
+import { Calendar, CalendarCell, type CellState } from '@/components/ui/Calendar';
 import { Loading } from '@/components/ui/Loading';
 
 function Section({ title, sub, children }: { title: string; sub?: string; children: React.ReactNode }) {
@@ -220,7 +220,14 @@ export default function DevComponents() {
 
       <Section title="Calendar (3상태 셀 — 사각형)">
         <div className="bg-white rounded-xl border border-gray/15 shadow-sm p-5">
-          <Calendar year={today.getFullYear()} month={today.getMonth()} cells={cells} />
+          <Calendar
+            year={today.getFullYear()}
+            month={today.getMonth()}
+            cells={cells}
+            renderCell={(c, onClick) => (
+              <CalendarCell day={c.day} state={c.state} isToday={c.isToday} onClick={onClick} />
+            )}
+          />
           <div className="flex flex-wrap gap-3 mt-5 pt-4 border-t border-gray/10 text-body-12 text-gray">
             <span className="inline-flex items-center gap-1.5">
               <span className="w-3 h-3 rounded-md bg-primary" /> 완수

@@ -23,7 +23,7 @@ export default function Home() {
             title={activeChallenge.title}
             durationDays={activeChallenge.durationDays}
             completedDays={completedDays}
-            onClick={() => navigate('/diary')}
+            onClick={() => navigate('/challenge')}
             rightSlot={
               <button
                 onClick={(e) => {

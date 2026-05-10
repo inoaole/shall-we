@@ -1,21 +1,40 @@
 /**
- * sessionStorage helper with quota-safe write.
+ * sessionStorage helper with quota-safe write + version migration.
  *
- * D-S2.1: STORAGE_KEY versioning — when state shape changes (new actions,
- * new fields), bump the version suffix. Old data is then ignored on hydrate
- * (returns null), which forces a clean reset rather than crashing on
- * undefined fields.
+ * STORAGE_KEY versioning — when state shape changes, bump the version. On
+ * read, transparently migrate previous-version data to current shape so users
+ * don't lose onboarding/challenge state across releases.
+ *
+ * v2 → v3: added `diaries: DiaryEntry[]`. Migration injects empty diaries.
  */
 
 import { notify } from './notify';
 
-const VERSION = 'v2';
+const VERSION = 'v3';
 export const STORAGE_KEY = `shallwe.app.${VERSION}`;
+const PREV_KEYS = ['shallwe.app.v2'];
 
+/**
+ * Read current-version data. If absent, walk previous-version keys, migrate
+ * the first match into the current key shape, and return it. Migrations are
+ * additive only (new fields default to empty / null).
+ */
 export function readStorage<T>(key: string = STORAGE_KEY): T | null {
   try {
     const raw = sessionStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as T) : null;
+    if (raw) return JSON.parse(raw) as T;
+
+    for (const prevKey of PREV_KEYS) {
+      const prev = sessionStorage.getItem(prevKey);
+      if (!prev) continue;
+      const parsed = JSON.parse(prev) as Record<string, unknown>;
+      const migrated = { diaries: [], ...parsed }; // additive defaults; actual fields preserved
+      sessionStorage.setItem(key, JSON.stringify(migrated));
+      sessionStorage.removeItem(prevKey);
+      return migrated as T;
+    }
+
+    return null;
   } catch {
     return null;
   }

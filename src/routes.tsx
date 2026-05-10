@@ -33,7 +33,9 @@ const CertTab        = lazy(() => import('@/screens/cert/CertTab'));
 const ChallengeCert  = lazy(() => import('@/screens/cert/ChallengeCert'));
 const Recommend      = lazy(() => import('@/screens/create/Recommend'));
 const Steps          = lazy(() => import('@/screens/create/Steps'));
-const Diary          = lazy(() => import('@/screens/diary/Calendar'));
+const DiaryTab       = lazy(() => import('@/screens/diary/DiaryTab'));
+const DiaryWrite     = lazy(() => import('@/screens/diary/DiaryWrite'));
+const MyChallenge    = lazy(() => import('@/screens/challenge/MyChallenge'));
 const MyPage         = lazy(() => import('@/screens/my/MyPage'));
 const Settings       = lazy(() => import('@/screens/my/Settings'));
 const DevComponents  = lazy(() => import('@/screens/dev/Components'));
@@ -57,13 +59,15 @@ export const router = createBrowserRouter([
   { path: '/create/new',         element: wrap(<Steps />) },
   { path: '/post/:id',           element: wrap(<PostDetail />) },
   { path: '/settings',           element: wrap(<Settings />) },
+  { path: '/diary/write',        element: wrap(<DiaryWrite />) },
+  { path: '/challenge',          element: wrap(<MyChallenge />) },
 
   // ── 4 tab routes (Header + BottomNav)
   {
     element: <TabLayout />,
     children: [
       { path: '/home',  element: wrap(<Home />) },
-      { path: '/diary', element: wrap(<Diary />) },
+      { path: '/diary', element: wrap(<DiaryTab />) },
       { path: '/cert',  element: wrap(<CertTab />) },
       { path: '/my',    element: wrap(<MyPage />) },
     ],

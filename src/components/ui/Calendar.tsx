@@ -1,10 +1,12 @@
 /**
- * Calendar — 3상태 셀 (완수 / 미완수 / 미래) + 오늘 강조 보더.
+ * Calendar — generic month grid + weekday header.
  *
- * Cell shape: rounded square (rounded-md), per user direction during S1 polish.
- * (Original `rounded-full` looked like marker dots; squares feel like a real
- * calendar grid and align cleanly with weekday columns.)
+ * Cell rendering is delegated to caller via `renderCell` so the same grid can
+ * power the challenge progress view (CalendarCell) and the AI 다이어리 mood
+ * view (MoodCell). DRY per eng review D4.
  */
+
+import { Fragment, type ReactNode } from 'react';
 
 export type CellState = 'done' | 'missed' | 'future' | 'today-empty' | 'other-month';
 
@@ -50,16 +52,31 @@ export function CalendarCell({ day, state, isToday, onClick }: CellProps) {
   );
 }
 
-interface CalendarProps {
+interface CellBase {
+  day: number;
+  isToday?: boolean;
+  date: Date;
+}
+
+interface CalendarProps<C extends CellBase> {
   year: number;
   month: number; // 0-11
-  cells: { day: number; state: CellState; isToday?: boolean; date: Date }[];
+  cells: C[];
+  renderCell: (cell: C, onClick: () => void) => ReactNode;
   onCellClick?: (date: Date) => void;
   onPrev?: () => void;
   onNext?: () => void;
 }
 
-export function Calendar({ year, month, cells, onCellClick, onPrev, onNext }: CalendarProps) {
+export function Calendar<C extends CellBase>({
+  year,
+  month,
+  cells,
+  renderCell,
+  onCellClick,
+  onPrev,
+  onNext,
+}: CalendarProps<C>) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
@@ -83,19 +100,16 @@ export function Calendar({ year, month, cells, onCellClick, onPrev, onNext }: Ca
       </div>
       <div className="grid grid-cols-7 gap-1.5 text-body-12 text-center text-gray mb-2 font-medium">
         {['월', '화', '수', '목', '금', '토', '일'].map((d) => (
-          <div key={d} className="py-1">{d}</div>
+          <div key={d} className="py-1">
+            {d}
+          </div>
         ))}
       </div>
       <div className="grid grid-cols-7 gap-1.5 justify-items-center">
-        {cells.map((c) => (
-          <CalendarCell
-            key={c.date.toISOString()}
-            day={c.day}
-            state={c.state}
-            isToday={c.isToday}
-            onClick={() => onCellClick?.(c.date)}
-          />
-        ))}
+        {cells.map((c) => {
+          const handleClick = () => onCellClick?.(c.date);
+          return <Fragment key={c.date.toISOString()}>{renderCell(c, handleClick)}</Fragment>;
+        })}
       </div>
     </div>
   );
