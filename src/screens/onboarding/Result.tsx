@@ -4,11 +4,11 @@ import { useApp } from '@/store/AppContext';
 import { Button } from '@/components/ui/Button';
 import { levelMessage, SUICIDE_PREVENTION } from '@/data/result-messages';
 
-const levelStyle: Record<string, { bg: string; text: string; ring: string }> = {
-  '없음': { bg: 'bg-bg-green-tint', text: 'text-primary',  ring: 'ring-primary/30' },
-  '낮음': { bg: 'bg-bg-green-tint', text: 'text-primary',  ring: 'ring-primary/30' },
-  '중간': { bg: 'bg-yellow/40',     text: 'text-gold',     ring: 'ring-gold/30' },
-  '높음': { bg: 'bg-yellow/60',     text: 'text-gold',     ring: 'ring-gold/40' },
+const levelColor: Record<string, string> = {
+  '없음': 'text-primary',
+  '낮음': 'text-primary',
+  '중간': 'text-gold',
+  '높음': 'text-gold',
 };
 
 export default function Result() {
@@ -18,32 +18,30 @@ export default function Result() {
   const lvl = state.phq9?.level ?? '낮음';
   const score9 = state.phq9?.answers[8] ?? 0;
   const showSuicideInfo = SUICIDE_PREVENTION.enabled && score9 >= 1;
-  const lvlStyle = levelStyle[lvl];
 
   return (
-    <div className="min-h-screen flex flex-col px-5 pt-10 pb-10 bg-bg-gray">
-      <p className="text-body-12 text-primary text-center font-semibold tracking-wide">
-        ✓ 결과 분석 완료
-      </p>
-
-      <div className="mt-10 mb-10 text-center space-y-4">
-        <p className="text-body-14 text-gray">당신의 무기력 정도는</p>
-        <div
-          className={`mx-auto inline-flex items-baseline gap-2 px-7 py-4 rounded-2xl ${lvlStyle.bg} ring-1 ${lvlStyle.ring} shadow-sm`}
-        >
-          <span className={`text-[40px] leading-none font-bold ${lvlStyle.text}`}>{lvl}</span>
-          <span className="text-subtitle-16 text-ink">입니다</span>
-        </div>
+    <div className="min-h-screen flex flex-col px-5 pt-12 pb-10 bg-bg-gray">
+      <div className="text-center mb-6">
+        <p className="text-body-14 text-gray">결과 분석 완료</p>
       </div>
 
-      <div className="bg-white rounded-xl shadow-md p-6">
-        <p className="text-subtitle-16 text-ink text-center whitespace-pre-line leading-relaxed">
+      <div className="text-center mb-12">
+        <p className="text-title-20 text-ink leading-relaxed">
+          당신의 무기력 정도는
+        </p>
+        <p className="text-title-24 text-ink mt-2">
+          <span className={levelColor[lvl]}>{lvl}</span> 입니다
+        </p>
+      </div>
+
+      <div className="bg-white rounded-xl border border-gray/15 shadow-sm p-6">
+        <p className="text-body-14 text-ink text-center whitespace-pre-line leading-relaxed">
           {levelMessage[lvl]}
         </p>
       </div>
 
       {showSuicideInfo && (
-        <div className="mt-8 p-4 bg-white rounded-xl border-[1.5px] border-primary/30 shadow-sm">
+        <div className="mt-4 p-4 bg-white rounded-xl border-[1.5px] border-primary/30">
           <p className="text-body-14 text-ink mb-3">{SUICIDE_PREVENTION.message}</p>
           <a
             href={`tel:${SUICIDE_PREVENTION.hotline}`}

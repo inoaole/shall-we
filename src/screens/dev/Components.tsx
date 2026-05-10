@@ -219,20 +219,17 @@ export default function DevComponents() {
       </Section>
 
       <Section title="Calendar (3상태 셀 — 사각형)">
-        <div className="bg-white rounded-xl shadow-md p-5">
+        <div className="bg-white rounded-xl border border-gray/15 shadow-sm p-5">
           <Calendar year={today.getFullYear()} month={today.getMonth()} cells={cells} />
           <div className="flex flex-wrap gap-3 mt-5 pt-4 border-t border-gray/10 text-body-12 text-gray">
             <span className="inline-flex items-center gap-1.5">
               <span className="w-3 h-3 rounded-md bg-primary" /> 완수
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-md bg-white border-[1.5px] border-gray/25" /> 미완수
+              <span className="w-3 h-3 rounded-md bg-white border border-gray/30" /> 미완수
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-md bg-gray/10" /> 미래
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-md bg-white border-[1.5px] border-primary ring-1 ring-primary/30" /> 오늘
+              <span className="w-3 h-3 rounded-md bg-bg-gray" /> 미래
             </span>
           </div>
         </div>
