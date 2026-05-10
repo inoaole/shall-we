@@ -99,7 +99,9 @@ function reducer(state: State, action: Action): State {
     case 'SET_PREFERENCE':
       return { ...state, preference: action.payload };
     case 'ADD_CHALLENGE':
-      return { ...state, challenges: [...state.challenges, action.payload] };
+      // Prepend so [0] is the newest. Home/MyPage/MyChallenge consumers
+      // read newest-first; old append behavior buried new challenges.
+      return { ...state, challenges: [action.payload, ...state.challenges] };
     case 'CERTIFY': {
       const newPosts = [action.payload, ...state.posts];
       const newFeed = action.payload.isPublic

@@ -9,22 +9,25 @@ export default function Home() {
   const navigate = useNavigate();
   const { state, dispatch } = useApp();
 
-  const activeChallenge = state.challenges[0];
-  const completedDays = activeChallenge
-    ? state.posts.filter((p) => p.challengeId === activeChallenge.id).length
-    : 0;
+  const completedDaysFor = (challengeId: string) =>
+    state.posts.filter((p) => p.challengeId === challengeId).length;
 
   return (
     <div className="px-5 pt-4 space-y-6">
-      {activeChallenge ? (
+      {state.challenges.length > 0 ? (
         <section>
           <h2 className="text-subtitle-16 text-ink mb-3">오늘의 챌린지</h2>
-          <TodayCard
-            title={activeChallenge.title}
-            durationDays={activeChallenge.durationDays}
-            completedDays={completedDays}
-            onClick={() => navigate('/challenge')}
-          />
+          <div className="space-y-3">
+            {state.challenges.map((c) => (
+              <TodayCard
+                key={c.id}
+                title={c.title}
+                durationDays={c.durationDays}
+                completedDays={completedDaysFor(c.id)}
+                onClick={() => navigate('/challenge')}
+              />
+            ))}
+          </div>
         </section>
       ) : (
         <section>
